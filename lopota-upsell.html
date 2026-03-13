@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lopota Resort — Upsell Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════════════════
+       THEME SYSTEM — 5 themes
+    ══════════════════════════════════════════════════════ */
+
+    /* 1. MIDNIGHT GOLD (default — current dark luxury) */
+    :root, [data-theme="midnight"] {
+      --bg:#0d1117; --surface:#161b22; --surface2:#1c2430;
+      --border:#21262d; --border2:#30363d;
+      --gold:#c9a84c; --gold-light:#e8c97a; --gold-dim:rgba(201,168,76,0.13);
+      --green:#3fb950; --green-dim:rgba(63,185,80,0.12);
+      --red:#f85149;   --red-dim:rgba(248,81,73,0.12);
+      --blue:#58a6ff;  --blue-dim:rgba(88,166,255,0.12);
+      --purple:#a371f7;--purple-dim:rgba(163,113,247,0.12);
+      --orange:#f0883e;--orange-dim:rgba(240,136,62,0.12);
+      --text:#e6edf3; --text-muted:#8b949e; --text-dim:#484f58;
+      --font-d:'Cormorant Garamond',serif; --font-b:'DM Sans',sans-serif;
+      --rl:16px;
+    }
+
+    /* 2. IVORY LINEN — soft warm light, high contrast text */
+    [data-theme="ivory"] {
+      --bg:#f5f0e8; --surface:#fffdf9; --surface2:#f0ebe0;
+      --border:#ddd5c5; --border2:#c8bfaf;
+      --gold:#8b6914; --gold-light:#a07820; --gold-dim:rgba(139,105,20,0.10);
+      --green:#1a6e3a; --green-dim:rgba(26,110,58,0.10);
+      --red:#c0392b;   --red-dim:rgba(192,57,43,0.10);
+      --blue:#1a5f9e;  --blue-dim:rgba(26,95,158,0.10);
+      --purple:#6b3fa0;--purple-dim:rgba(107,63,160,0.10);
+      --orange:#c0581a;--orange-dim:rgba(192,88,26,0.10);
+      --text:#1a1510; --text-muted:#5a4e3c; --text-dim:#9c8e78;
+      --rl:16px;
+    }
+
+    /* 3. FOREST SLATE — deep teal-green, nature inspired */
+    [data-theme="forest"] {
+      --bg:#0e1a18; --surface:#152320; --surface2:#1c2e2a;
+      --border:#253530; --border2:#344840;
+      --gold:#7ec8a0; --gold-light:#a0e0bc; --gold-dim:rgba(126,200,160,0.12);
+      --green:#52d68a; --green-dim:rgba(82,214,138,0.12);
+      --red:#ff6b6b;   --red-dim:rgba(255,107,107,0.12);
+      --blue:#5bc8d8;  --blue-dim:rgba(91,200,216,0.12);
+      --purple:#b08ad8;--purple-dim:rgba(176,138,216,0.12);
+      --orange:#e8a84c;--orange-dim:rgba(232,168,76,0.12);
+      --text:#d4ede4; --text-muted:#7aab92; --text-dim:#3d6055;
+      --rl:16px;
+    }
+
+    /* 4. CHALK LIGHT — clean minimal white, corporate */
+    [data-theme="chalk"] {
+      --bg:#f8f9fa; --surface:#ffffff; --surface2:#f1f3f5;
+      --border:#dee2e6; --border2:#ced4da;
+      --gold:#c97c10; --gold-light:#e09020; --gold-dim:rgba(201,124,16,0.09);
+      --green:#1e7e44; --green-dim:rgba(30,126,68,0.10);
+      --red:#c0392b;   --red-dim:rgba(192,57,43,0.10);
+      --blue:#1a6eb0;  --blue-dim:rgba(26,110,176,0.10);
+      --purple:#6441a5;--purple-dim:rgba(100,65,165,0.10);
+      --orange:#c0581a;--orange-dim:rgba(192,88,26,0.10);
+      --text:#212529; --text-muted:#495057; --text-dim:#adb5bd;
+      --rl:14px;
+    }
+
+    /* 5. OBSIDIAN CRIMSON — dark with rich red accent */
+    [data-theme="obsidian"] {
+      --bg:#100c0c; --surface:#1a1212; --surface2:#221818;
+      --border:#2e1f1f; --border2:#3d2a2a;
+      --gold:#e05c5c; --gold-light:#f07878; --gold-dim:rgba(224,92,92,0.13);
+      --green:#5cb87a; --green-dim:rgba(92,184,122,0.12);
+      --red:#ff8080;   --red-dim:rgba(255,128,128,0.12);
+      --blue:#7ab4e0;  --blue-dim:rgba(122,180,224,0.12);
+      --purple:#c49de0;--purple-dim:rgba(196,157,224,0.12);
+      --orange:#e8a84c;--orange-dim:rgba(232,168,76,0.12);
+      --text:#f0e8e8; --text-muted:#a08080; --text-dim:#5a3a3a;
+      --rl:16px;
+    }
+
+    /* ── THEME SWITCHER ─────────────────────────────────── */
+    .theme-switcher{padding:12px 14px;border-top:1px solid var(--border);}
+    .theme-switcher-label{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;padding:0 4px;}
+    .theme-dots{display:flex;gap:7px;padding:0 4px;}
+    .tdot{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .18s;position:relative;flex-shrink:0;}
+    .tdot:hover{transform:scale(1.18);}
+    .tdot.active{border-color:var(--text);box-shadow:0 0 0 2px var(--bg);}
+    .tdot[data-t="midnight"]{background:radial-gradient(circle at 35% 35%,#c9a84c 0%,#1c2430 55%);}
+    .tdot[data-t="ivory"]   {background:radial-gradient(circle at 35% 35%,#8b6914 0%,#f5f0e8 55%);}
+    .tdot[data-t="forest"]  {background:radial-gradient(circle at 35% 35%,#7ec8a0 0%,#0e1a18 55%);}
+    .tdot[data-t="chalk"]   {background:radial-gradient(circle at 35% 35%,#c97c10 0%,#f8f9fa 55%);}
+    .tdot[data-t="obsidian"]{background:radial-gradient(circle at 35% 35%,#e05c5c 0%,#100c0c 55%);}
+    .tdot-tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-size:.6rem;white-space:nowrap;padding:3px 7px;border-radius:5px;pointer-events:none;opacity:0;transition:opacity .15s;}
+    .tdot:hover .tdot-tip{opacity:1;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+    /* SIDEBAR */
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:242px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;}
+    .logo{padding:24px 22px 16px;border-bottom:1px solid var(--border);}
+    .logo-name{font-family:var(--font-d);font-size:1.4rem;font-weight:500;color:var(--gold);letter-spacing:.03em;}
+    .logo-tag{font-size:.59rem;color:var(--text-muted);letter-spacing:.14em;text-transform:uppercase;margin-top:3px;}
+    .nav{padding:12px 0;flex:1;overflow-y:auto;}
+    .ns{padding:10px 22px 3px;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
+    .ni{display:flex;align-items:center;gap:9px;padding:9px 22px;cursor:pointer;font-size:.81rem;color:var(--text-muted);transition:all .15s;border-left:2px solid transparent;}
+    .ni:hover{color:var(--text);background:rgba(255,255,255,.025);}
+    .ni.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold-dim);}
+    .ni svg{width:14px;height:14px;flex-shrink:0;}
+    .nbadge{margin-left:auto;font-size:.62rem;padding:1px 7px;border-radius:20px;font-weight:600;}
+    .sf{padding:14px 22px;border-top:1px solid var(--border);font-size:.71rem;color:var(--text-dim);}
+    .sf strong{color:var(--text-muted);display:block;font-size:.77rem;margin-bottom:1px;}
+
+    /* TOPBAR */
+    .main{margin-left:242px;min-height:100vh;}
+    .topbar{position:sticky;top:0;z-index:50;background:rgba(13,17,23,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;}
+    .tbl{display:flex;align-items:center;gap:12px;}
+    .page-title{font-size:.9rem;font-weight:500;}
+    .dpill{font-size:.66rem;padding:3px 10px;border-radius:20px;font-weight:600;}
+    .tbr{display:flex;align-items:center;gap:9px;}
+    .tdate{font-size:.71rem;color:var(--text-muted);}
+    .btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:7px;font-size:.76rem;font-weight:500;cursor:pointer;border:1px solid transparent;font-family:var(--font-b);transition:all .15s;}
+    .btn-p{background:var(--gold);color:#000;}
+    .btn-p:hover{background:var(--gold-light);}
+    .btn-g{background:transparent;color:var(--text-muted);border:1px solid var(--border);}
+    .btn-g:hover{color:var(--text);border-color:var(--border2);}
+    .btn svg{width:12px;height:12px;}
+
+    /* CONTENT */
+    .content{padding:24px 28px;}
+    .tabs{display:flex;gap:4px;margin-bottom:22px;}
+    .tab{padding:7px 15px;border-radius:7px;font-size:.78rem;cursor:pointer;color:var(--text-muted);transition:all .15s;}
+    .tab:hover{color:var(--text);background:rgba(255,255,255,.04);}
+    .tab.active{background:var(--gold-dim);color:var(--gold);font-weight:500;}
+
+    /* KPI */
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:20px;}
+    .kpi-grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:20px;}
+    .kc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s;}
+    .kc:hover{border-color:rgba(201,168,76,.25);}
+    .kc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--ca,var(--gold));}
+    .kl{font-size:.67rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;}
+    .kv{font-family:var(--font-d);font-size:2rem;font-weight:400;line-height:1;margin-bottom:6px;}
+    .ks{font-size:.67rem;color:var(--text-dim);margin-top:3px;}
+
+    /* LAYOUT */
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:17px;margin-bottom:17px;}
+    .g3{display:grid;grid-template-columns:2fr 1fr;gap:17px;margin-bottom:17px;}
+
+    /* PANEL */
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;}
+    .ph{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .ptt{font-size:.83rem;font-weight:500;}
+    .ptt span{font-size:.67rem;color:var(--text-muted);font-weight:400;margin-left:6px;}
+    .pb{padding:18px;}
+
+    /* CHART */
+    .chart-wrap{height:160px;display:flex;align-items:flex-end;gap:7px;}
+    .bc{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+    .bl{font-size:.59rem;color:var(--text-muted);}
+    .bv{font-size:.59rem;color:var(--text-dim);}
+    .bar-empty{width:100%;border-radius:4px 4px 0 0;height:4px;background:var(--surface2);border:1px dashed var(--border2);border-bottom:none;}
+
+    /* DONUT EMPTY */
+    .donut-empty{display:flex;align-items:center;justify-content:center;height:140px;flex-direction:column;gap:8px;color:var(--text-dim);}
+    .donut-empty svg{opacity:.2;}
+    .donut-empty span{font-size:.75rem;}
+
+    /* TABLE */
+    .tw{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;font-size:.79rem;}
+    thead th{padding:9px 13px;text-align:left;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);font-weight:500;border-bottom:1px solid var(--border);}
+    tbody tr{border-bottom:1px solid rgba(33,38,45,.5);transition:background .1s;}
+    tbody tr:last-child{border-bottom:none;}
+    tbody tr:hover{background:rgba(255,255,255,.018);}
+    tbody td{padding:10px 13px;color:var(--text-muted);vertical-align:middle;}
+    td.b{color:var(--text);font-weight:500;}
+    .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:.66rem;font-weight:600;}
+    .bg2{background:var(--green-dim);color:var(--green);}
+    .bo2{background:var(--gold-dim);color:var(--gold);}
+    .br2{background:var(--red-dim);color:var(--red);}
+
+    /* PROGRESS */
+    .pr-row{display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+    .pr-row:last-child{margin-bottom:0;}
+    .pr-name{font-size:.76rem;color:var(--text-muted);min-width:145px;}
+    .pr-track{flex:1;height:5px;background:var(--surface2);border-radius:99px;overflow:hidden;}
+    .pr-fill{height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+    .pr-pct{font-size:.69rem;color:var(--text-muted);min-width:34px;text-align:right;}
+
+    /* FEED */
+    .feed{display:flex;flex-direction:column;}
+    .fi{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+    .fi:last-child{border-bottom:none;}
+    .fic{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem;}
+    .fb{flex:1;}
+    .ft{font-size:.78rem;color:var(--text);margin-bottom:2px;}
+    .fm{font-size:.67rem;color:var(--text-dim);}
+    .fa{font-size:.79rem;font-weight:600;flex-shrink:0;margin-top:1px;}
+
+    /* STAFF */
+    .sg{display:flex;flex-direction:column;gap:8px;}
+    .sr{display:flex;align-items:center;gap:9px;padding:9px 10px;background:var(--surface2);border-radius:8px;}
+    .sav{width:31px;height:31px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--gold);font-weight:600;flex-shrink:0;}
+    .sn{font-size:.79rem;font-weight:500;}
+    .sd{font-size:.66rem;color:var(--text-dim);}
+    .ss{font-size:.82rem;font-weight:700;color:var(--gold);min-width:56px;text-align:right;}
+    .rk{font-size:.67rem;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;}
+    .r1{background:var(--gold);color:#000;}
+    .r2{background:#b5b5b5;color:#000;}
+    .r3{background:#cd7f32;color:#fff;}
+    .rn{background:var(--surface);color:var(--text-dim);border:1px solid var(--border);}
+
+    /* EMPTY STATE */
+    .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;gap:10px;color:var(--text-dim);}
+    .empty-state .ei{font-size:2rem;opacity:.3;}
+    .empty-state .et{font-size:.8rem;}
+    .empty-state .es{font-size:.72rem;color:var(--text-dim);opacity:.7;}
+
+    /* MODAL */
+    .mb{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(5px);z-index:200;display:none;align-items:center;justify-content:center;}
+    .mb.open{display:flex;}
+    .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);width:500px;max-width:95vw;max-height:92vh;overflow-y:scroll;box-shadow:0 24px 64px rgba(0,0,0,.55);animation:su .2s ease;scrollbar-width:none;}
+    .modal::-webkit-scrollbar{display:none;}
+    @keyframes su{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .mh{padding:17px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .mt{font-size:.92rem;font-weight:500;}
+    .mc{width:26px;height:26px;border-radius:6px;background:transparent;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.93rem;transition:color .12s,background .12s,border-color .12s;}
+    .mc:hover{background:var(--red-dim);border-color:var(--red);color:var(--red);}
+    .mbody{padding:21px;display:flex;flex-direction:column;gap:13px;contain:layout style;}
+    .fg{display:flex;flex-direction:column;gap:5px;min-width:0;}
+    .fl{font-size:.69rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;}
+    .fi2,.fs{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--text);font-family:var(--font-b);font-size:.81rem;transition:border-color .15s;width:100%;box-sizing:border-box;}
+    .fi2:focus,.fs:focus{outline:none;border-color:var(--gold);}
+    .fi2[readonly]:focus{border-color:var(--border);}
+    .amount-locked{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-family:var(--font-b);font-size:.88rem;font-weight:700;color:var(--gold);box-sizing:border-box;display:flex;align-items:center;gap:6px;min-height:37px;width:100;}
+    .fr2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .mf2{padding:13px 22px;border-top:1px solid var(--border);display:flex;gap:9px;justify-content:flex-end;}
+    .csg{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+    .csi{padding:9px 11px;border-radius:8px;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:7px;font-size:.79rem;color:var(--text-muted);transition:color .12s, border-color .12s, background .12s;}
+    .csi:hover{border-color:var(--border2);color:var(--text);}
+    .csi.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);}
+    .csi span{font-size:1rem;}
+
+    /* CATALOG */
+    .df-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
+    .df{padding:6px 13px;border-radius:20px;font-size:.74rem;cursor:pointer;border:1px solid var(--border);color:var(--text-muted);transition:color .12s,border-color .12s,background .12s;}
+    .df:hover{border-color:var(--border2);color:var(--text);}
+    .df.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);font-weight:500;}
+
+    /* HIDE NUMBER SPINNERS */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
+    input[type=number]{-moz-appearance:textfield;}
+
+    /* INLINE STATUS SELECT */
+    .status-sel{background:transparent;border:none;font-family:var(--font-b);font-size:.66rem;font-weight:600;cursor:pointer;outline:none;padding:2px 4px 2px 8px;border-radius:20px;appearance:none;-webkit-appearance:none;}
+    .status-sel:hover{opacity:.8;}
+
+    /* CATALOG ACTION BUTTONS */
+    .icon-btn{width:26px;height:26px;border-radius:6px;background:transparent;border:1px solid var(--border);color:var(--text-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .12s,background .12s,border-color .12s;}
+    .icon-btn svg{width:12px;height:12px;}
+    .icon-btn:hover{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);}
+    .icon-btn-del:hover{background:var(--red-dim)!important;border-color:var(--red)!important;color:var(--red)!important;}
+
+    /* ── LIGHT THEME OVERRIDES (ivory + chalk) ────────────── */
+    [data-theme="ivory"] .topbar,
+    [data-theme="chalk"] .topbar {
+      background:rgba(245,240,232,.92);
+    }
+    [data-theme="chalk"] .topbar {
+      background:rgba(248,249,250,.95);
+    }
+    [data-theme="ivory"] body,
+    [data-theme="chalk"] body {
+      color: var(--text);
+    }
+    [data-theme="ivory"] tbody tr:hover,
+    [data-theme="chalk"] tbody tr:hover {
+      background:rgba(0,0,0,.025);
+    }
+    [data-theme="ivory"] .ni:hover,
+    [data-theme="chalk"] .ni:hover {
+      background:rgba(0,0,0,.04);
+    }
+    [data-theme="ivory"] .sr,
+    [data-theme="chalk"] .sr {
+      background:var(--surface2);
+    }
+    /* scrollbar for light */
+    [data-theme="ivory"] ::-webkit-scrollbar-thumb,
+    [data-theme="chalk"] ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+    }
+    /* kc hover subtle for light */
+    [data-theme="ivory"] .kc:hover,
+    [data-theme="chalk"] .kc:hover {
+      border-color: var(--gold);
+    }
+    /* tab active for all themes uses --gold which is theme-aware */
+    /* status select options readable on light */
+    [data-theme="ivory"] select option,
+    [data-theme="chalk"] select option {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    /* ── EMOJI PICKER ───────────────────────────────────── */
+    .emoji-field{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;cursor:pointer;transition:border-color .12s;user-select:none;box-sizing:border-box;width:100%;}
+    .emoji-field:hover{border-color:var(--border2);}
+    .emoji-field.open{border-color:var(--gold);}
+    .emoji-preview{font-size:1.25rem;line-height:1;flex-shrink:0;min-width:22px;text-align:center;}
+    .emoji-field-hint{font-size:.78rem;color:var(--text-muted);flex:1;}
+    .emoji-field.has-value .emoji-field-hint{color:var(--text);}
+    .emoji-chevron{width:13px;height:13px;color:var(--text-dim);flex-shrink:0;transition:transform .15s;}
+    .emoji-field.open .emoji-chevron{transform:rotate(180deg);}
+
+    .emoji-picker{display:none;margin-top:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.35);}
+    .emoji-picker.open{display:flex;flex-direction:column;}
+    .ep-search-wrap{padding:10px 10px 6px;}
+    .ep-search{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;color:var(--text);font-family:var(--font-b);font-size:.8rem;box-sizing:border-box;outline:none;transition:border-color .12s;}
+    .ep-search:focus{border-color:var(--gold);}
+    .ep-cats{display:flex;gap:2px;padding:4px 8px 6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+    .ep-cats::-webkit-scrollbar{display:none;}
+    .ep-cat{padding:4px 9px;border-radius:6px;font-size:.72rem;cursor:pointer;color:var(--text-muted);white-space:nowrap;transition:color .12s,background .12s;border:1px solid transparent;}
+    .ep-cat:hover{color:var(--text);background:var(--surface2);}
+    .ep-cat.active{color:var(--gold);background:var(--gold-dim);border-color:var(--gold);}
+    .ep-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:1px;padding:6px 8px 10px;max-height:200px;overflow-y:scroll;scrollbar-width:none;}
+    .ep-grid::-webkit-scrollbar{display:none;}
+    .ep-btn{font-size:1.3rem;border:none;background:none;cursor:pointer;border-radius:6px;padding:4px;line-height:1;transition:background .1s,transform .1s;display:flex;align-items:center;justify-content:center;}
+    .ep-btn:hover{background:var(--surface2);transform:scale(1.2);}
+    .ep-btn.selected{background:var(--gold-dim);outline:2px solid var(--gold);}
+    .ep-empty{grid-column:1/-1;text-align:center;padding:20px;color:var(--text-dim);font-size:.8rem;}
+
+    /* ── CALENDAR PICKER ────────────────────────────────────── */
+    .cal-btn{display:flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;cursor:pointer;font-family:var(--font-b);font-size:.81rem;color:var(--text-muted);white-space:nowrap;transition:border-color .12s,color .12s;}
+    .cal-btn:hover{border-color:var(--border2);color:var(--text);}
+    .cal-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+    .cal-btn svg{width:14px;height:14px;flex-shrink:0;}
+    .cal-clear{display:none;background:none;border:none;cursor:pointer;color:var(--text-dim);padding:0;line-height:1;font-size:.9rem;}
+    .cal-clear:hover{color:var(--red);}
+    .cal-popup{display:none;position:absolute;z-index:500;margin-top:4px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:0 12px 40px rgba(0,0,0,.4);min-width:280px;}
+    .cal-popup.open{display:block;}
+    .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .cal-nav-btn{background:none;border:1px solid var(--border);border-radius:6px;width:26px;height:26px;cursor:pointer;color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:color .12s,border-color .12s;}
+    .cal-nav-btn:hover{color:var(--gold);border-color:var(--gold);}
+    .cal-month-label{font-size:.82rem;font-weight:600;color:var(--text);}
+    .cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;}
+    .cal-dow span{text-align:center;font-size:.62rem;color:var(--text-dim);padding:2px 0;}
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+    .cal-day{height:30px;border-radius:6px;border:none;background:none;cursor:pointer;font-size:.76rem;font-family:var(--font-b);color:var(--text-muted);transition:background .1s,color .1s;}
+    .cal-day:hover{background:var(--surface2);color:var(--text);}
+    .cal-day.has-data{color:var(--text);font-weight:600;}
+    .cal-day.selected{background:var(--gold);color:#000;font-weight:700;}
+    .cal-day.today{outline:1px solid var(--gold);outline-offset:-1px;}
+    .cal-day.empty{cursor:default;}
+    .cal-dot{display:block;width:4px;height:4px;border-radius:50%;background:var(--gold);margin:1px auto 0;}
+    .cal-wrap{position:relative;display:inline-block;}
+
+    /* PAGE */
+    .page{display:none;}
+    .page.active{display:block;}
+    ::-webkit-scrollbar{width:4px;height:4px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:21px;right:21px;color:#fff;padding:10px 17px;border-radius:8px;font-size:.79rem;font-weight:500;z-index:999;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;}
+    .toast.show{transform:translateY(0);opacity:1;}
+    /* LOGIN SCREEN */
+    .login-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;}
+    .login-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:44px 40px 36px;width:360px;max-width:92vw;box-shadow:0 32px 80px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;gap:0;}
+    .login-logo{font-family:var(--font-d);font-size:2rem;font-weight:400;color:var(--gold);letter-spacing:.04em;margin-bottom:4px;}
+    .login-tag{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:36px;}
+    .login-label{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;align-self:flex-start;margin-bottom:7px;}
+    .login-input-wrap{position:relative;width:100%;margin-bottom:10px;}
+    .login-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:11px 42px 11px 14px;color:var(--text);font-family:var(--font-b);font-size:.92rem;box-sizing:border-box;outline:none;transition:border-color .15s;letter-spacing:.05em;}
+    .login-input:focus{border-color:var(--gold);}
+    .login-input.error{border-color:var(--red);animation:shake .3s ease;}
+    .login-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-dim);padding:2px;display:flex;}
+    .login-eye:hover{color:var(--text-muted);}
+    .login-eye svg{width:16px;height:16px;}
+    .login-err{font-size:.74rem;color:var(--red);min-height:18px;align-self:flex-start;margin-bottom:4px;opacity:0;transition:opacity .2s;}
+    .login-err.show{opacity:1;}
+    .login-btn{width:100%;padding:11px;background:var(--gold);color:#000;border:none;border-radius:9px;font-family:var(--font-b);font-size:.88rem;font-weight:600;cursor:pointer;margin-top:8px;transition:background .15s;}
+    .login-btn:hover{background:var(--gold-light);}
+    .login-divider{width:40px;height:1px;background:var(--border);margin:24px 0 0;}
+    .login-hint{font-size:.62rem;color:var(--text-dim);margin-top:8px;}
+    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Lopota Resort</div>
+    <div class="login-tag">Upsell Management</div>
+    <div class="login-label">პაროლი</div>
+    <div class="login-input-wrap">
+      <input class="login-input" id="loginInput" type="password"
+        placeholder="შეიყვანეთ პაროლი"
+        onkeydown="if(event.key==='Enter')checkLogin()"
+        oninput="document.getElementById('loginErr').classList.remove('show');this.classList.remove('error')">
+      <button class="login-eye" onclick="toggleLoginPwd()" tabindex="-1" type="button">
+        <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+      </button>
+    </div>
+    <div class="login-err" id="loginErr">❌ პაროლი არასწორია</div>
+    <button class="login-btn" onclick="checkLogin()">შესვლა →</button>
+    <div class="login-divider"></div>
+    <div class="login-hint">Lopota Resort · Upsell Dashboard</div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-name">Lopota Resort</div>
+    <div class="logo-tag">Upsell Management · 2025</div>
+  </div>
+  <nav class="nav">
+    <div class="ns">მთავარი</div>
+    <div class="ni active" onclick="showPage('dashboard',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </div>
+    <div class="ni" onclick="showPage('log',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      გაყიდვების ჟურნალი
+      <span class="nbadge" style="background:var(--gold);color:#000" id="nb">0</span>
+    </div>
+
+    <div class="ns">განყოფილებები</div>
+    <div class="ni" onclick="showDept('frontdesk',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Front Desk
+      <span class="nbadge" style="background:var(--blue-dim);color:var(--blue)" id="cnt-fd">0</span>
+    </div>
+    <div class="ni" onclick="showDept('spa',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      SPA
+      <span class="nbadge" style="background:var(--purple-dim);color:var(--purple)" id="cnt-spa">0</span>
+    </div>
+    <div class="ni" onclick="showDept('adventure',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+      სათავგ. აქტ.
+      <span class="nbadge" style="background:var(--orange-dim);color:var(--orange)" id="cnt-adv">0</span>
+    </div>
+    <div class="ni" onclick="showDept('wine',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 22h8M12 11v11M6 2l2 8a4 4 0 008 0l2-8"/></svg>
+      ღვინის ტური
+      <span class="nbadge" style="background:var(--blue-dim);color:var(--blue)" id="cnt-wine">0</span>
+    </div>
+
+    <div class="ns">ანალიტიკა</div>
+    <div class="ni" onclick="showPage('stats',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      სტატისტიკა
+    </div>
+    <div class="ni" onclick="showPage('staff',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      თანამშრომლები
+    </div>
+    <div class="ni" onclick="showPage('catalog',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      Upsell კატალოგი
+    </div>
+  </nav>
+  <div class="sf">
+    <strong>Lopota Resort</strong>
+    <span id="sfDate"></span>
+  </div>
+  <div class="theme-switcher">
+    <div class="theme-switcher-label">დიზაინი</div>
+    <div class="theme-dots">
+      <div class="tdot active" data-t="midnight" onclick="setTheme('midnight',this)" title="Midnight Gold">
+        <span class="tdot-tip">Midnight Gold</span>
+      </div>
+      <div class="tdot" data-t="ivory" onclick="setTheme('ivory',this)" title="Ivory Linen">
+        <span class="tdot-tip">Ivory Linen</span>
+      </div>
+      <div class="tdot" data-t="forest" onclick="setTheme('forest',this)" title="Forest Slate">
+        <span class="tdot-tip">Forest Slate</span>
+      </div>
+      <div class="tdot" data-t="chalk" onclick="setTheme('chalk',this)" title="Chalk Light">
+        <span class="tdot-tip">Chalk Light</span>
+      </div>
+      <div class="tdot" data-t="obsidian" onclick="setTheme('obsidian',this)" title="Obsidian Crimson">
+        <span class="tdot-tip">Obsidian</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="tbl">
+      <span class="page-title" id="pageTitle">Dashboard</span>
+      <span class="dpill" style="background:var(--gold-dim);color:var(--gold)" id="deptPill">ყველა</span>
+    </div>
+    <div class="tbr">
+      <span class="tdate" id="liveTime"></span>
+      <button class="btn btn-g" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        CSV
+      </button>
+      <button class="btn btn-p" onclick="openModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        გაყიდვის დამატება
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="page active" id="page-dashboard">
+      <div class="tabs">
+        <div class="tab active" onclick="setDashPeriod('day',this)">დღეს</div>
+        <div class="tab" onclick="setDashPeriod('week',this)">კვირა</div>
+        <div class="tab" onclick="setDashPeriod('month',this)">თვე</div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kc" style="--ca:var(--gold)">
+          <div class="kl">შემოსავალი</div>
+          <div class="kv" style="color:var(--gold)" id="k-rev">₾0</div>
+          <div class="ks" id="k-rev-sub">გაყიდვები არ არის</div>
+        </div>
+        <div class="kc" style="--ca:var(--green)">
+          <div class="kl">გაყიდვები</div>
+          <div class="kv" style="color:var(--green)" id="k-sales">0</div>
+          <div class="ks" id="k-sales-sub">დღეს</div>
+        </div>
+        <div class="kc" style="--ca:var(--blue)">
+          <div class="kl">კონვერსია</div>
+          <div class="kv" style="color:var(--blue)" id="k-conv">—</div>
+          <div class="ks">შემოთავაზება / გაყიდვა</div>
+        </div>
+      </div>
+
+      <div class="g3">
+        <div class="panel">
+          <div class="ph"><div class="ptt">შემოსავალი — <span id="barChartTitle">ბოლო 7 დღე</span> <span>₾/დღეში</span></div></div>
+          <div class="pb"><div class="chart-wrap" id="barChart"></div></div>
+        </div>
+        <div class="panel">
+          <div class="ph"><div class="ptt">კატეგორიების განაწილება</div></div>
+          <div class="pb" id="donutWrap">
+            <div class="donut-empty">
+              <svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="24" fill="none" stroke="currentColor" stroke-width="12"/></svg>
+              <span>მონაცემი არ არის</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="panel">
+          <div class="ph">
+            <div class="ptt">ბოლო გაყიდვები</div>
+            <button class="btn btn-g" style="padding:4px 9px;font-size:.71rem" onclick="showPage('log',document.querySelectorAll('.ni')[1])">ყველა გაყიდვა →</button>
+          </div>
+          <div class="pb">
+            <div class="feed" id="recentFeed">
+              <div class="empty-state"><div class="ei">📋</div><div class="et">გაყიდვები არ არის</div><div class="es">დაამატეთ პირველი გაყიდვა</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="ph"><div class="ptt">TOP თანამშრომლები <span>პერიოდში</span></div></div>
+          <div class="pb">
+            <div class="sg" id="topStaff">
+              <div class="empty-state"><div class="ei">🏆</div><div class="et">მონაცემი არ არის</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ LOG ══ -->
+    <div class="page" id="page-log">
+      <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:16px;">
+        <input class="fi2" style="max-width:200px" placeholder="🔍 ძებნა..." id="searchInput" oninput="filterTable()">
+        <select class="fs" style="max-width:165px" id="filterCat" onchange="filterTable()">
+          <option value="">ყველა კატ.</option>
+          <option>Room Upgrade</option>
+          <option>SPA პაკეტი</option>
+          <option>სათავგ. აქტ.</option>
+          <option>ღვინის ტური</option>
+        </select>
+        <select class="fs" style="max-width:140px" id="filterDept" onchange="filterTable()">
+          <option value="">ყველა განყ.</option>
+          <option>Front Desk</option>
+          <option>SPA</option>
+          <option>Adventures</option>
+          <option>Wine</option>
+        </select>
+        <select class="fs" style="max-width:135px" id="filterStatus" onchange="filterTable()">
+          <option value="">ყველა სტ.</option>
+          <option>გაყიდული</option>
+          <option>უარყოფილი</option>
+          <option>მოლოდინი</option>
+        </select>
+        <!-- CALENDAR -->
+        <div class="cal-wrap" id="calWrap">
+          <div style="display:flex;align-items:center;gap:5px;">
+            <button type="button" class="cal-btn" id="calBtn" onclick="toggleCal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span id="calBtnLabel">თარიღი</span>
+            </button>
+            <button type="button" class="cal-clear" id="calClear" onclick="clearCalFilter()" title="გასუფთავება">✕</button>
+          </div>
+          <div class="cal-popup" id="calPopup">
+            <div class="cal-nav">
+              <button type="button" class="cal-nav-btn" onclick="calShift(-1)">‹</button>
+              <span class="cal-month-label" id="calMonthLabel"></span>
+              <button type="button" class="cal-nav-btn" onclick="calShift(1)">›</button>
+            </div>
+            <div class="cal-dow">
+              <span>კვ</span><span>ორ</span><span>სამ</span><span>ოთხ</span><span>ხუ</span><span>პა</span><span>შა</span>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+        <span id="tableCount" style="font-size:.71rem;color:var(--text-muted);margin-left:auto;"></span>
+      </div>
+      <div class="panel">
+        <div class="tw">
+          <table>
+            <thead><tr><th>#</th><th>სტუმარი / ნომერი</th><th>კატეგორია</th><th>პროდუქტი / ფასი</th><th>განყოფილება</th><th>თანამშრომელი</th><th>თანხა (₾)</th><th>საკომისიო %</th><th>საკომისიო ₾</th><th>სტატუსი</th><th>თარიღი / დრო</th></tr></thead>
+            <tbody id="salesBody">
+              <tr><td colspan="11"><div class="empty-state"><div class="ei">📋</div><div class="et">გაყიდვა არ დამატებულა</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ DEPT ══ -->
+    <div class="page" id="page-dept">
+      <div class="kpi-grid" id="deptKpis"></div>
+      <div class="g2">
+        <div class="panel"><div class="ph"><div class="ptt">პროდუქტების შედეგები</div></div><div class="pb" id="deptProgress"></div></div>
+        <div class="panel"><div class="ph"><div class="ptt">გუნდი</div></div><div class="pb"><div class="sg" id="deptStaff"></div></div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ptt">ბოლო გაყიდვები — <span id="deptName2">განყოფილება</span></div></div>
+        <div class="pb"><div class="feed" id="deptFeed"></div></div>
+      </div>
+    </div>
+
+    <!-- ══ STATS ══ -->
+    <div class="page" id="page-stats">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
+        <div class="tab-group">
+          <div class="tab active" id="stab-day"   onclick="setStatsPeriod('day',this)">დღეს</div>
+          <div class="tab"        id="stab-week"  onclick="setStatsPeriod('week',this)">კვირა</div>
+          <div class="tab"        id="stab-month" onclick="setStatsPeriod('month',this)">თვე</div>
+          <div class="tab"        id="stab-all"   onclick="setStatsPeriod('all',this)">ყველა</div>
+        </div>
+        <span id="stats-period-label" style="font-size:.72rem;color:var(--text-dim);letter-spacing:.04em"></span>
+      </div>
+      <div class="kpi-grid">
+        <div class="kc" style="--ca:var(--gold)"><div class="kl">შემოსავალი</div><div class="kv" style="color:var(--gold)" id="s-rev">₾0</div><div class="ks" id="s-rev-sub">—</div></div>
+        <div class="kc" style="--ca:var(--green)"><div class="kl">გაყიდვები სულ</div><div class="kv" style="color:var(--green)" id="s-cnt">0</div><div class="ks">—</div></div>
+        <div class="kc" style="--ca:var(--blue)"><div class="kl">კონვერსია</div><div class="kv" style="color:var(--blue)" id="s-conv">—</div><div class="ks">—</div></div>
+      </div>
+      <div class="g2">
+        <div class="panel">
+          <div class="ph"><div class="ptt">კატეგორიების შედეგები</div></div>
+          <div class="pb" id="statsProgress">
+            <div class="empty-state"><div class="ei">📊</div><div class="et">გაყიდვები არ არის</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="ph"><div class="ptt">TOP პროდუქტები</div></div>
+          <div class="pb tw">
+            <table>
+              <thead><tr><th>პროდუქტი</th><th>რაოდენობა</th><th>₾</th></tr></thead>
+              <tbody id="topProducts">
+                <tr><td colspan="3"><div class="empty-state" style="padding:20px"><div class="et">მონაცემი არ არის</div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ptt">განყოფილებების შედარება</div></div>
+        <div class="pb tw">
+          <table>
+            <thead><tr><th>განყოფილება</th><th>გაყიდვები</th><th>შემოსავალი</th><th>კონვ. %</th></tr></thead>
+            <tbody id="deptCompare">
+              <tr><td colspan="5"><div class="empty-state" style="padding:20px"><div class="et">მონაცემი არ არის</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STAFF ══ -->
+    <div class="page" id="page-staff">
+      <div class="kpi-grid">
+        <div class="kc" style="--ca:var(--gold)"><div class="kl">საუკეთესო</div><div class="kv" style="color:var(--gold);font-size:1.3rem" id="st-best">—</div><div class="ks">გაყიდვების შემდეგ</div></div>
+        <div class="kc" style="--ca:var(--green)"><div class="kl">გუნდი</div><div class="kv" style="color:var(--green)" id="st-total">0</div><div class="ks" id="st-breakdown">—</div></div>
+        
+        <div class="kc" style="--ca:var(--green)"><div class="kl">ჯამური ბონუსი</div><div class="kv" style="color:var(--green)" id="st-bonus-kpi">₾0</div><div class="ks">გაყიდული სტატუსიდან</div></div>
+      </div>
+      <div class="panel">
+        <div class="ph">
+          <div class="ptt">თანამშრომელთა შედეგები</div>
+          <select class="fs" style="width:140px;padding:5px 9px;font-size:.73rem" onchange="filterStaff(this.value)">
+            <option value="">ყველა</option>
+            <option>Front Desk</option><option>SPA</option><option>Adventures</option><option>Wine</option>
+          </select>
+        </div>
+        <div class="pb tw">
+          <table>
+            <thead><tr><th>#</th><th>სახელი</th><th>განყოფილება</th><th>გაყიდვები</th><th>შემოსავალი</th><th>ბონუსი 💰</th><th>კონვ. %</th></tr></thead>
+            <tbody id="staffBody">
+              <tr><td colspan="8"><div class="empty-state"><div class="ei">👤</div><div class="et">გაყიდვები არ არის</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CATALOG ══ -->
+    <div class="page" id="page-catalog">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
+        <div class="df-wrap" id="catFilters" style="margin:0"></div>
+        <button class="btn btn-p" onclick="openCatalogModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          კატ. დამატება
+        </button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:13px" id="catalogGrid"></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="mb" id="modalBg">
+  <div class="modal">
+    <div class="mh">
+      <span class="mt">✦ გაყიდვის დამატება</span>
+      <button class="mc" onclick="closeModal()">×</button>
+    </div>
+    <div class="mbody">
+      <div class="fr2">
+        <div class="fg"><label class="fl">ნომრის №</label><input class="fi2" placeholder="214" id="mRoom"></div>
+        <div class="fg"><label class="fl">სტუმრის სახელი</label><input class="fi2" placeholder="სახელი" id="mGuest"></div>
+      </div>
+      <div class="fg">
+        <label class="fl">კატეგორია</label>
+        <div class="csg" id="catGrid"></div>
+      </div>
+      <div class="fg">
+        <label class="fl">პროდუქტი</label>
+        <select class="fs" id="mProduct"><option>— ჯ. კატ. —</option></select>
+      </div>
+      <div class="fr2">
+        <div class="fg">
+          <label class="fl">თანხა (₾) <span style="color:var(--text-dim);font-size:.6rem;letter-spacing:0;text-transform:none">— ავტ. კატალოგიდან</span></label>
+          <div class="amount-locked" id="mAmountDisplay">—</div>
+          <input type="hidden" id="mAmount" value="">
+        </div>
+        <div class="fg"><label class="fl">სტატუსი</label>
+          <div class="fi2" style="background:var(--gold-dim);color:var(--gold);cursor:default;pointer-events:none;font-weight:600;font-size:.8rem;">⏳ მოლოდინი</div>
+          <input type="hidden" id="mStatus" value="მოლოდინი">
+        </div>
+      </div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">განყოფილება</label>
+          <div class="amount-locked" id="mDeptDisplay" style="color:var(--text-muted);font-weight:400;font-size:.81rem;">— აირჩიეთ პროდუქტი —</div>
+          <input type="hidden" id="mDept" value="">
+        </div>
+        <div class="fg">
+          <label class="fl">თანამშრომელი</label>
+          <input class="fi2" placeholder="სახელი გვარი" id="mStaff" autocomplete="off">
+        </div>
+      </div>
+      <div class="fg"><label class="fl">შენიშვნა</label><input class="fi2" placeholder="სურვილისამებრ" id="mNote"></div>
+    </div>
+    <div class="mf2">
+      <button class="btn btn-g" onclick="closeModal()">გაუქმ.</button>
+      <button class="btn btn-p" onclick="saveSale()">✓ შენახვა</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- CATALOG MODAL -->
+<div class="mb" id="catModalBg">
+  <div class="modal" style="width:520px">
+    <div class="mh">
+      <span class="mt" id="catModalTitle">✦ კატალოგის დამატება</span>
+      <button class="mc" onclick="closeCatalogModal()">×</button>
+    </div>
+    <div class="mbody">
+      <!-- Icon + Name row -->
+      <div class="fr2">
+        <div class="fg">
+          <label class="fl">ემოჯი / ხატულა</label>
+          <div class="emoji-field" id="emojiField" onclick="toggleEmojiPicker()">
+            <span class="emoji-preview" id="emojiPreview">➕</span>
+            <span class="emoji-field-hint">აირჩიეთ ემოჯი</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="emoji-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <input type="hidden" id="cIcon" value="">
+          <!-- EMOJI PICKER -->
+          <div class="emoji-picker" id="emojiPicker">
+            <div class="ep-search-wrap">
+              <input class="ep-search" id="epSearch" placeholder="🔍  ძებნა..." oninput="filterEmoji(this.value)" autocomplete="off">
+            </div>
+            <div class="ep-cats" id="epCats"></div>
+            <div class="ep-grid" id="epGrid"></div>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">სერვისის სახელი</label>
+          <input class="fi2" placeholder="სახელი" id="cName">
+        </div>
+      </div>
+      <!-- Dept -->
+      <div class="fg">
+        <label class="fl">განყოფილება</label>
+        <div class="csg" id="cDeptGrid">
+          <div class="csi" onclick="selectCatalogDept('SPA',this)"><span>💆</span>SPA</div>
+          <div class="csi" onclick="selectCatalogDept('Front Desk',this)"><span>🏠</span>Front Desk</div>
+          <div class="csi" onclick="selectCatalogDept('Adventures',this)"><span>🧗</span>სათავგ. აქტ.</div>
+          <div class="csi" onclick="selectCatalogDept('Wine',this)"><span>🍷</span>ღვინის ტური</div>
+        </div>
+      </div>
+      <!-- Price + Commission -->
+      <div class="fr2">
+        <div class="fg">
+          <label class="fl">ღირებულება (₾)</label>
+          <input class="fi2" placeholder="0" id="cPrice" type="number" min="0">
+        </div>
+        <div class="fg">
+          <label class="fl">სერვისის საკომისიო (%)</label>
+          <div style="position:relative">
+            <input class="fi2" placeholder="0" id="cCommission" type="number" min="0" max="100" style="padding-right:28px">
+            <span style="position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:.75rem;color:var(--text-muted)">%</span>
+          </div>
+        </div>
+      </div>
+      <!-- Price label (display) -->
+      <div class="fg">
+        <label class="fl">ფასის ჩვენება (არასავალდებულო)</label>
+        <input class="fi2" placeholder="მაგ. ₾150–₾300 ან +₾80/ღ" id="cPriceLabel">
+        <span style="font-size:.67rem;color:var(--text-dim);margin-top:3px">დატოვეთ ცარიელი — ავტ. ₾X ჩაიწერება</span>
+      </div>
+      <!-- Description -->
+      <div class="fg">
+        <label class="fl">აღწერა</label>
+        <textarea class="fi2" placeholder="მოკლე აღწერა..." id="cDesc" rows="2" style="resize:vertical;min-height:56px"></textarea>
+      </div>
+    </div>
+    <div class="mf2" style="justify-content:space-between">
+      <button class="btn" id="cDeleteBtn" style="background:var(--red-dim);color:var(--red);border-color:var(--red);display:none" onclick="deleteCatalogItem()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        წაშლა
+      </button>
+      <div style="display:flex;gap:9px">
+        <button class="btn btn-g" onclick="closeCatalogModal()">გაუქმება</button>
+        <button class="btn btn-p" onclick="saveCatalogItem()">✓ შენახვა</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── AUTH ──────────────────────────────────────────────────────────────
+const PWD = 'Lopota!';
+function checkLogin() {
+  const val = document.getElementById('loginInput').value;
+  if (val === PWD) {
+    try { sessionStorage.setItem('lopota-auth','1'); } catch(e){}
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('loginInput').value = '';
+  } else {
+    const inp = document.getElementById('loginInput');
+    const err = document.getElementById('loginErr');
+    inp.classList.add('error');
+    err.classList.add('show');
+    inp.value = '';
+    inp.focus();
+  }
+}
+function toggleLoginPwd() {
+  const inp  = document.getElementById('loginInput');
+  const icon = document.getElementById('eyeIcon');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+  } else {
+    inp.type = 'password';
+    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  }
+}
+
+// ── DATA DEFINITIONS ──────────────────────────────────────────────────
+const CATS = {
+  'Room Upgrade':  {icon:'🏨', color:'var(--gold)',   dept:'Front Desk', products:['Standard → Deluxe','Deluxe → Suite','Junior → Grand Suite','Lake View +','Mountain View +'], prices:[80,200,350,80,60]},
+  'SPA პაკეტი':   {icon:'💆', color:'var(--purple)', dept:'SPA',         products:['SPA Premium (2h)','Couples Retreat','Detox Package','Facial + Body','Full Day Wellness','Hydro Pool Access'], prices:[180,280,220,140,320,90]},
+  'სათავგ. აქტ.': {icon:'🧗', color:'var(--orange)', dept:'Adventures',  products:['ATV Tour (2h)','Kayaking — Lake','Horse Riding','Mountain Hiking','Zip Line','Archery Session','Boat Tour'], prices:[150,90,110,80,60,50,100]},
+  'ღვინის ტური':  {icon:'🍷', color:'var(--blue)',   dept:'Wine',        products:['Lopota Wine Tour','Private Wine Tasting','Kakheti Winery Visit','Wine + Cheese Pairing'], prices:[120,240,180,150]},
+};
+
+const DCOL = {'Front Desk':'var(--blue)','SPA':'var(--purple)','Adventures':'var(--orange)','Wine':'var(--blue)'};
+const DBG  = {'Front Desk':'var(--blue-dim)','SPA':'var(--purple-dim)','Adventures':'var(--orange-dim)','Wine':'var(--blue-dim)'};
+
+const DEPT_MAP = {frontdesk:'Front Desk', spa:'SPA', adventure:'Adventures', wine:'Wine'};
+
+// ── EMOJI PICKER ──────────────────────────────────────────────────────
+const EMOJI_DB = [
+  { cat:'🏨 სასტუმრო',  emojis:['🏨','🛎️','🛏️','🔑','🗝️','🚪','🛋️','🛁','🚿','🪟','🏩','🏪','🏫','🏬','🏰','🏯','🗼','⭐','🌟','✨'] },
+  { cat:'💆 სპა',       emojis:['💆','💆‍♀️','💆‍♂️','🧖','🧖‍♀️','🛀','💅','🪷','🌸','🌺','🌻','🌹','🌿','🍃','🌱','🧴','🧼','💊','🩺','❤️‍🩹'] },
+  { cat:'🏃 სპორტი',   emojis:['🏃','🏃‍♀️','🧗','🧗‍♀️','🏊','🏊‍♀️','🚵','🚵‍♀️','🏇','🎯','🏹','🥊','🤸','🤸‍♀️','🧘','🧘‍♀️','🚴','🚴‍♀️','⛷️','🏂'] },
+  { cat:'🍷 ღვინო',     emojis:['🍷','🥂','🍾','🍸','🍹','🥃','🫗','🍻','🧉','🍇','🍓','🫐','🍒','🥝','🧀','🍖','🥩','🫙','🏺','🌾'] },
+  { cat:'🌊 წყალი',     emojis:['🌊','🏖️','🏝️','⛵','🚤','🛥️','🤿','🎣','🦭','🐬','🐳','🦈','🐟','🐠','🦀','🦞','🦑','🐙','🪸','💧'] },
+  { cat:'🌲 ბუნება',    emojis:['🌲','🌳','🌴','🌵','🎋','🎍','🍀','🌿','🌱','🪨','⛰️','🏔️','🗻','🌋','🏕️','🌄','🌅','🌠','🌌','🌙'] },
+  { cat:'🚗 ტრანსპ.',   emojis:['🚗','🏍️','🚵','🛵','🚁','🛶','⛵','🚀','🛸','🚂','🚡','🚠','🚟','🛤️','🛣️','🗺️','🧭','⛽','🏁','🚦'] },
+  { cat:'🎭 გართობა',   emojis:['🎭','🎪','🎨','🎬','🎤','🎵','🎶','🎸','🎹','🎺','🥁','🎲','🎮','🃏','🎱','🎳','🎯','🎠','🎡','🎢'] },
+  { cat:'🍽️ საჭმელი',  emojis:['🍽️','🥗','🍱','🍣','🍜','🍝','🥘','🫕','🥩','🍗','🥐','🥞','🧇','🍰','🎂','🍩','🍦','☕','🍵','🧃'] },
+  { cat:'💎 სიმბოლო',   emojis:['💎','👑','🏆','🥇','🎖️','🎗️','🔮','💫','⚡','🔥','💧','🌈','🍀','⚜️','🦁','🦋','🦚','🦜','🌺','🎁'] },
+];
+
+let currentEmojiCat = 0;
+let selectedEmoji   = '';
+
+function initEmojiPicker() {
+  const catEl = document.getElementById('epCats');
+  catEl.innerHTML = EMOJI_DB.map((c, i) =>
+    `<div class="ep-cat ${i===0?'active':''}" onclick="switchEmojiCat(${i},this)">${c.cat}</div>`
+  ).join('');
+  renderEmojiGrid(EMOJI_DB[0].emojis);
+}
+
+function switchEmojiCat(i, el) {
+  currentEmojiCat = i;
+  document.querySelectorAll('.ep-cat').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('epSearch').value = '';
+  renderEmojiGrid(EMOJI_DB[i].emojis);
+}
+
+function renderEmojiGrid(emojis) {
+  const grid = document.getElementById('epGrid');
+  if (!emojis.length) {
+    grid.innerHTML = `<div class="ep-empty">ემოჯი ვერ მოიძებნა</div>`;
+    return;
+  }
+  grid.innerHTML = emojis.map(e =>
+    `<button type="button" class="ep-btn ${e===selectedEmoji?'selected':''}" onclick="pickEmoji('${e}')" title="${e}">${e}</button>`
+  ).join('');
+}
+
+function filterEmoji(q) {
+  if (!q.trim()) { renderEmojiGrid(EMOJI_DB[currentEmojiCat].emojis); return; }
+  const all = EMOJI_DB.flatMap(c => c.emojis);
+  // simple substring match on emoji character
+  renderEmojiGrid(all.filter(e => e.includes(q.trim())));
+}
+
+function pickEmoji(e) {
+  selectedEmoji = e;
+  document.getElementById('cIcon').value = e;
+  // update field display
+  const field   = document.getElementById('emojiField');
+  document.getElementById('emojiPreview').textContent = e;
+  field.querySelector('.emoji-field-hint').textContent = e + '  — არჩეულია';
+  field.classList.add('has-value');
+  // highlight selected
+  document.querySelectorAll('.ep-btn').forEach(b => b.classList.toggle('selected', b.textContent === e));
+  closeEmojiPicker();
+}
+
+function toggleEmojiPicker() {
+  const picker = document.getElementById('emojiPicker');
+  const field  = document.getElementById('emojiField');
+  const isOpen = picker.classList.contains('open');
+  if (isOpen) { closeEmojiPicker(); }
+  else {
+    picker.classList.add('open');
+    field.classList.add('open');
+    // focus search
+    setTimeout(() => document.getElementById('epSearch').focus(), 50);
+  }
+}
+
+function closeEmojiPicker() {
+  document.getElementById('emojiPicker').classList.remove('open');
+  document.getElementById('emojiField').classList.remove('open');
+}
+
+function resetEmojiField() {
+  selectedEmoji = '';
+  document.getElementById('cIcon').value = '';
+  document.getElementById('emojiPreview').textContent = '➕';
+  const field = document.getElementById('emojiField');
+  field.querySelector('.emoji-field-hint').textContent = 'აირჩიეთ ემოჯი';
+  field.classList.remove('has-value');
+  closeEmojiPicker();
+}
+
+function setEmojiField(val) {
+  if (!val) { resetEmojiField(); return; }
+  selectedEmoji = val;
+  document.getElementById('cIcon').value = val;
+  document.getElementById('emojiPreview').textContent = val;
+  const field = document.getElementById('emojiField');
+  field.querySelector('.emoji-field-hint').textContent = val + '  — არჩეულია';
+  field.classList.add('has-value');
+}
+
+// close picker when clicking outside
+document.addEventListener('click', e => {
+  const field  = document.getElementById('emojiField');
+  const picker = document.getElementById('emojiPicker');
+  if (field && picker && !field.contains(e.target) && !picker.contains(e.target)) {
+    closeEmojiPicker();
+  }
+});
+
+// ── STATE ─────────────────────────────────────────────────────────────
+let sales = [];
+let nextId = 1;
+// ── DUMMY DATA (დროებითი) — წასაშლელი ──────────────────────────────
+(function(){
+  const today = new Date();
+  const d = (offset) => { const x = new Date(today); x.setDate(today.getDate()-offset); return x.toISOString().slice(0,10); };
+  const t = (h,m) => `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+
+  const raw = [
+    // Today (15 entries)
+    {room:'101', guest:'გიორგი მამულაშვილი',   cat:'Room Upgrade',  product:'Suite Upgrade',        dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:200, commission:10, status:'გაყიდული',   time:t(9,12),  date:d(0)},
+    {room:'214', guest:'Mariam Beridze',        cat:'SPA პაკეტი',    product:'SPA Premium',          dept:'SPA',         staff:'სალომე გიგაური',     amount:180, commission:15, status:'გაყიდული',   time:t(9,45),  date:d(0)},
+    {room:'312', guest:'David Kvaratskhelia',   cat:'სათავგ. აქტ.', product:'ATV Tour',             dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:150, commission:12, status:'გაყიდული',   time:t(10,20), date:d(0)},
+    {room:'118', guest:'ანა ჯაფარიძე',         cat:'ღვინის ტური',  product:'Lopota Wine Tour',     dept:'Wine',        staff:'ეკა ბერიძე',         amount:120, commission:8,  status:'გაყიდული',   time:t(10,55), date:d(0)},
+    {room:'205', guest:'Tornike Sharikadze',    cat:'Room Upgrade',  product:'Lake View Room',       dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:80,  commission:10, status:'გაყიდული',   time:t(11,10), date:d(0)},
+    {room:'309', guest:'თამარ ელიავა',          cat:'SPA პაკეტი',    product:'Couples Retreat',      dept:'SPA',         staff:'სალომე გიგაური',     amount:280, commission:15, status:'მოლოდინი',   time:t(11,30), date:d(0)},
+    {room:'401', guest:'Zurab Tsereteli',       cat:'სათავგ. აქტ.', product:'Horse Riding',         dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:110, commission:12, status:'გაყიდული',   time:t(12,5),  date:d(0)},
+    {room:'115', guest:'მარი ლომიძე',           cat:'ღვინის ტური',  product:'Private Wine Tasting', dept:'Wine',        staff:'ეკა ბერიძე',         amount:240, commission:8,  status:'გაყიდული',   time:t(12,40), date:d(0)},
+    {room:'220', guest:'Irakli Kobakhidze',     cat:'Room Upgrade',  product:'Mountain View +',      dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:60,  commission:10, status:'უარყოფილი',  time:t(13,15), date:d(0)},
+    {room:'317', guest:'ნათია გოგბერაშვილი',   cat:'SPA პაკეტი',    product:'Detox Package',        dept:'SPA',         staff:'სალომე გიგაური',     amount:220, commission:15, status:'გაყიდული',   time:t(13,50), date:d(0)},
+    {room:'108', guest:'Alexandre Dumas',       cat:'სათავგ. აქტ.', product:'Kayaking',             dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:90,  commission:12, status:'გაყიდული',   time:t(14,20), date:d(0)},
+    {room:'403', guest:'სოფო ნიჟარაძე',        cat:'ღვინის ტური',  product:'Lopota Wine Tour',     dept:'Wine',        staff:'ეკა ბერიძე',         amount:120, commission:8,  status:'მოლოდინი',   time:t(14,55), date:d(0)},
+    {room:'211', guest:'Giorgi Tsereteli',      cat:'Room Upgrade',  product:'Suite Upgrade',        dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:200, commission:10, status:'გაყიდული',   time:t(15,30), date:d(0)},
+    {room:'306', guest:'ლელა ჩიქოვანი',        cat:'SPA პაკეტი',    product:'SPA Premium',          dept:'SPA',         staff:'სალომე გიგაური',     amount:180, commission:15, status:'გაყიდული',   time:t(16,10), date:d(0)},
+    {room:'412', guest:'Nino Burjanadze',       cat:'სათავგ. აქტ.', product:'Archery Session',      dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:50,  commission:12, status:'გაყიდული',   time:t(16,45), date:d(0)},
+    // Yesterday (12 entries)
+    {room:'202', guest:'დავით გამყრელიძე',     cat:'Room Upgrade',  product:'Lake View Room',       dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:80,  commission:10, status:'გაყიდული',   time:t(9,30),  date:d(1)},
+    {room:'315', guest:'Khatuna Lortkipanidze', cat:'SPA პაკეტი',    product:'Couples Retreat',      dept:'SPA',         staff:'სალომე გიგაური',     amount:280, commission:15, status:'გაყიდული',   time:t(10,15), date:d(1)},
+    {room:'104', guest:'ვახტანგ ბარბაქაძე',   cat:'ღვინის ტური',  product:'Private Wine Tasting', dept:'Wine',        staff:'ეკა ბერიძე',         amount:240, commission:8,  status:'გაყიდული',   time:t(11,0),  date:d(1)},
+    {room:'407', guest:'Sophie Mchedlishvili',  cat:'სათავგ. აქტ.', product:'ATV Tour',             dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:150, commission:12, status:'უარყოფილი',  time:t(11,40), date:d(1)},
+    {room:'213', guest:'ხათუნა სვანიძე',       cat:'Room Upgrade',  product:'Suite Upgrade',        dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:200, commission:10, status:'გაყიდული',   time:t(12,20), date:d(1)},
+    {room:'318', guest:'Levan Varshanidze',     cat:'SPA პაკეტი',    product:'Detox Package',        dept:'SPA',         staff:'სალომე გიგაური',     amount:220, commission:15, status:'გაყიდული',   time:t(13,5),  date:d(1)},
+    {room:'110', guest:'ნიკა წიკლაური',        cat:'ღვინის ტური',  product:'Lopota Wine Tour',     dept:'Wine',        staff:'ეკა ბერიძე',         amount:120, commission:8,  status:'გაყიდული',   time:t(13,50), date:d(1)},
+    {room:'405', guest:'Tamar Gvenetadze',      cat:'სათავგ. აქტ.', product:'Horse Riding',         dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:110, commission:12, status:'გაყიდული',   time:t(14,30), date:d(1)},
+    {room:'208', guest:'მანანა ქობულაძე',      cat:'Room Upgrade',  product:'Mountain View +',      dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:60,  commission:10, status:'გაყიდული',   time:t(15,10), date:d(1)},
+    {room:'311', guest:'Giorgi Baramidze',      cat:'SPA პაკეტი',    product:'SPA Premium',          dept:'SPA',         staff:'სალომე გიგაური',     amount:180, commission:15, status:'მოლოდინი',   time:t(15,55), date:d(1)},
+    {room:'103', guest:'ლაშა ხვედელიძე',       cat:'სათავგ. აქტ.', product:'Kayaking',             dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:90,  commission:12, status:'გაყიდული',   time:t(16,35), date:d(1)},
+    {room:'410', guest:'Mzia Kikalishvili',     cat:'ღვინის ტური',  product:'Private Wine Tasting', dept:'Wine',        staff:'ეკა ბერიძე',         amount:240, commission:8,  status:'გაყიდული',   time:t(17,15), date:d(1)},
+    // 2 days ago (8 entries)
+    {room:'301', guest:'ბექა ჯავახიშვილი',     cat:'Room Upgrade',  product:'Suite Upgrade',        dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:200, commission:10, status:'გაყიდული',   time:t(10,0),  date:d(2)},
+    {room:'116', guest:'Ana Dolidze',           cat:'SPA პაკეტი',    product:'Couples Retreat',      dept:'SPA',         staff:'სალომე გიგაური',     amount:280, commission:15, status:'გაყიდული',   time:t(11,30), date:d(2)},
+    {room:'209', guest:'ზურაბ ხაჭაპურიძე',    cat:'სათავგ. აქტ.', product:'ATV Tour',             dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:150, commission:12, status:'გაყიდული',   time:t(13,0),  date:d(2)},
+    {room:'404', guest:'Nino Tvaltvadze',       cat:'ღვინის ტური',  product:'Lopota Wine Tour',     dept:'Wine',        staff:'ეკა ბერიძე',         amount:120, commission:8,  status:'უარყოფილი',  time:t(14,20), date:d(2)},
+    {room:'112', guest:'გვანცა ოქრუაშვილი',   cat:'Room Upgrade',  product:'Lake View Room',       dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:80,  commission:10, status:'გაყიდული',   time:t(15,45), date:d(2)},
+    {room:'307', guest:'Irakli Garibashvili',   cat:'SPA პაკეტი',    product:'SPA Premium',          dept:'SPA',         staff:'სალომე გიგაური',     amount:180, commission:15, status:'გაყიდული',   time:t(16,30), date:d(2)},
+    {room:'201', guest:'თორნიკე ბასილაშვილი', cat:'სათავგ. აქტ.', product:'Archery Session',      dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:50,  commission:12, status:'გაყიდული',   time:t(17,0),  date:d(2)},
+    {room:'415', guest:'Maka Chichinadze',      cat:'ღვინის ტური',  product:'Private Wine Tasting', dept:'Wine',        staff:'ეკა ბერიძე',         amount:240, commission:8,  status:'გაყიდული',   time:t(17,45), date:d(2)},
+    // 3 days ago (6 entries)
+    {room:'217', guest:'სანდრო ფხაკაძე',       cat:'Room Upgrade',  product:'Mountain View +',      dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:60,  commission:10, status:'გაყიდული',   time:t(9,20),  date:d(3)},
+    {room:'320', guest:'Elene Kvachantiradze',  cat:'SPA პაკეტი',    product:'Detox Package',        dept:'SPA',         staff:'სალომე გიგაური',     amount:220, commission:15, status:'გაყიდული',   time:t(10,50), date:d(3)},
+    {room:'106', guest:'გიგა ბახტაძე',         cat:'სათავგ. აქტ.', product:'Horse Riding',         dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:110, commission:12, status:'მოლოდინი',   time:t(12,30), date:d(3)},
+    {room:'408', guest:'Nato Mskhiladze',       cat:'ღვინის ტური',  product:'Lopota Wine Tour',     dept:'Wine',        staff:'ეკა ბერიძე',         amount:120, commission:8,  status:'გაყიდული',   time:t(14,0),  date:d(3)},
+    {room:'113', guest:'ქეთევან ღვინიაშვილი', cat:'Room Upgrade',  product:'Suite Upgrade',        dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:200, commission:10, status:'გაყიდული',   time:t(15,20), date:d(3)},
+    {room:'302', guest:'Giorgi Papuashvili',    cat:'SPA პაკეტი',    product:'SPA Premium',          dept:'SPA',         staff:'სალომე გიგაური',     amount:180, commission:15, status:'გაყიდული',   time:t(16,45), date:d(3)},
+    // 4 days ago (5 entries)
+    {room:'119', guest:'ნათია ჩხეტიანი',       cat:'სათავგ. აქტ.', product:'Kayaking',             dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:90,  commission:12, status:'გაყიდული',   time:t(10,10), date:d(4)},
+    {room:'223', guest:'David Usupashvili',     cat:'ღვინის ტური',  product:'Private Wine Tasting', dept:'Wine',        staff:'ეკა ბერიძე',         amount:240, commission:8,  status:'გაყიდული',   time:t(11,40), date:d(4)},
+    {room:'316', guest:'მარიამ ბოლქვაძე',      cat:'Room Upgrade',  product:'Lake View Room',       dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:80,  commission:10, status:'უარყოფილი',  time:t(13,15), date:d(4)},
+    {room:'411', guest:'Tamar Sanikidze',       cat:'SPA პაკეტი',    product:'Couples Retreat',      dept:'SPA',         staff:'სალომე გიგაური',     amount:280, commission:15, status:'გაყიდული',   time:t(14,50), date:d(4)},
+    {room:'107', guest:'ლევან კვირიკაშვილი',  cat:'სათავგ. აქტ.', product:'ATV Tour',             dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:150, commission:12, status:'გაყიდული',   time:t(16,20), date:d(4)},
+    // 5 days ago (4 entries)
+    {room:'304', guest:'ეკა ბოჭოიძე',          cat:'ღვინის ტური',  product:'Lopota Wine Tour',     dept:'Wine',        staff:'ეკა ბერიძე',         amount:120, commission:8,  status:'გაყიდული',   time:t(10,30), date:d(5)},
+    {room:'121', guest:'Zurab Zhvania',         cat:'Room Upgrade',  product:'Suite Upgrade',        dept:'Front Desk',  staff:'ნინო კვარაცხელია',   amount:200, commission:10, status:'გაყიდული',   time:t(12,0),  date:d(5)},
+    {room:'218', guest:'თამარ ხელიძე',         cat:'SPA პაკეტი',    product:'Detox Package',        dept:'SPA',         staff:'სალომე გიგაური',     amount:220, commission:15, status:'გაყიდული',   time:t(13,45), date:d(5)},
+    {room:'413', guest:'Irakli Alasania',       cat:'სათავგ. აქტ.', product:'Archery Session',      dept:'Adventures',  staff:'ლუკა მეფარიშვილი',   amount:50,  commission:12, status:'მოლოდინი',   time:t(15,30), date:d(5)},
+  ];
+
+  raw.forEach((s, i) => { sales.push({id: nextId++, ...s}); });
+})();
+// ── END DUMMY DATA ───────────────────────────────────────────────────
+let dashPeriod = 'day'; // 'day' | 'week' | 'month'
+
+function renderDashboard() {
+  updateDashKpis();
+  renderBarChart();
+  renderDonut();
+  renderFeed();
+  renderTopStaff();
+}
+
+function setDashPeriod(p, el) {
+  dashPeriod = p;
+  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderDashboard();
+}
+
+function salesInPeriod(period) {
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
+  return sales.filter(s => {
+    if (!s.date) return period === 'day'; // legacy entries default to today
+    if (period === 'day')   return s.date === todayStr;
+    if (period === 'week') {
+      const d = new Date(today); d.setDate(today.getDate() - 6);
+      return s.date >= d.toISOString().slice(0,10);
+    }
+    if (period === 'month') {
+      return s.date.slice(0,7) === todayStr.slice(0,7);
+    }
+    return true;
+  });
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const titles = {dashboard:'Dashboard', log:'გაყიდვების ჟურნალი', stats:'სტატისტიკა', staff:'თანამშრომლები', catalog:'კატალოგი', dept:'განყოფილების ანალიტიკა'};
+  document.getElementById('pageTitle').textContent = titles[id] || id;
+  document.getElementById('deptPill').textContent = 'ყველა';
+  document.getElementById('deptPill').style.background = 'var(--gold-dim)';
+  document.getElementById('deptPill').style.color = 'var(--gold)';
+  if (id === 'log')       renderTable();
+  if (id === 'staff')     renderStaffPage();
+  if (id === 'stats')     renderStats();
+  if (id === 'catalog')   { buildCatFilters(); renderCatalog(''); }
+  if (id === 'dashboard') renderDashboard();
+}
+
+function showDept(dept, el) {
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (dept === 'all') { showPage('dashboard', el); return; }
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-dept').classList.add('active');
+  const n = DEPT_MAP[dept];
+  document.getElementById('pageTitle').textContent = n + ' — ანალიტიკა';
+  document.getElementById('deptPill').textContent = n;
+  document.getElementById('deptPill').style.background = DBG[n] || 'var(--gold-dim)';
+  document.getElementById('deptPill').style.color = DCOL[n] || 'var(--gold)';
+  document.getElementById('deptName2').textContent = n;
+  renderDeptPage(n);
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+function getCatInfo(catStr) {
+  const item = catalogItems.find(c => c.cat === catStr);
+  if (item) return {icon: item.icon, color: item.color};
+  // fallback
+  const fallbacks = {'Room Upgrade':{icon:'🏨',color:'var(--gold)'},'SPA პაკეტი':{icon:'💆',color:'var(--purple)'},'სათავგ. აქტ.':{icon:'🧗',color:'var(--orange)'},'ღვინის ტური':{icon:'🍷',color:'var(--blue)'}};
+  return fallbacks[catStr] || {icon:'📦', color:'var(--text-muted)'};
+}
+
+function fmt(n) { return n.toLocaleString('ka-GE'); }
+
+function updateBadges() {
+  document.getElementById('nb').textContent = sales.length;
+  const depts = {frontdesk:'Front Desk', spa:'SPA', adventure:'Adventures', wine:'Wine'};
+  Object.entries(depts).forEach(([k, v]) => {
+    const el = document.getElementById('cnt-' + k.replace('adventure','adv'));
+    if (el) el.textContent = sales.filter(s => s.dept === v).length;
+  });
+  // fix key mismatch for adventure
+  const adv = document.getElementById('cnt-adv');
+  if (adv) adv.textContent = sales.filter(s => s.dept === 'Adventures').length;
+}
+
+// ── DASHBOARD KPIs ────────────────────────────────────────────────────
+function updateDashKpis() {
+  const periodSales = salesInPeriod(dashPeriod);
+  const sold = periodSales.filter(s => s.status === 'გაყიდული');
+  const rev  = sold.reduce((a, s) => a + s.amount, 0);
+  const cnt  = sold.length;
+  const avg  = cnt ? Math.round(rev / cnt) : 0;
+  const periodLabel = dashPeriod === 'day' ? 'დღეს' : dashPeriod === 'week' ? 'კვირაში' : 'თვეში';
+
+  document.getElementById('k-rev').textContent     = '₾' + fmt(rev);
+  document.getElementById('k-rev-sub').textContent  = cnt ? (cnt + ' გაყიდვა · ' + periodLabel) : 'გაყ. არ არის';
+  document.getElementById('k-sales').textContent    = cnt;
+  document.getElementById('k-sales-sub').textContent = periodSales.length ? ('სულ: ' + periodSales.length + ' შემოთავაზება') : periodLabel;
+  document.getElementById('k-conv').textContent     = periodSales.length ? Math.round(cnt / periodSales.length * 100) + '%' : '—';
+}
+
+// ── BAR CHART ─────────────────────────────────────────────────────────
+function renderBarChart() {
+  const dayLabels = ['კვ','ორ','სამ','ოთხ','ხ','პ','შ'];
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0,10);
+  const sold = sales.filter(s => s.status === 'გაყიდული');
+  const wrap = document.getElementById('barChart');
+  const titleEl = document.getElementById('barChartTitle');
+
+  let days;
+  if (dashPeriod === 'month') {
+    if (titleEl) titleEl.textContent = 'ბოლო 4 კვირა';
+    days = [];
+    for (let w = 3; w >= 0; w--) {
+      const from = new Date(today); from.setDate(today.getDate() - w*7 - 6);
+      const to   = new Date(today); to.setDate(today.getDate() - w*7);
+      const fromStr = from.toISOString().slice(0,10);
+      const toStr   = to.toISOString().slice(0,10);
+      const rev = sold.filter(s => s.date && s.date >= fromStr && s.date <= toStr)
+                      .reduce((a,s) => a + s.amount, 0);
+      days.push({ label: (4-w) + '-კვ', date: toStr, isToday: w === 0, rev });
+    }
+  } else {
+    if (titleEl) titleEl.textContent = dashPeriod === 'day' ? 'დღეს' : 'ბოლო 7 დღე';
+    days = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today); d.setDate(today.getDate() - i);
+      const dateStr = d.toISOString().slice(0,10);
+      const rev = sold.filter(s => s.date === dateStr).reduce((a,s) => a + s.amount, 0);
+      days.push({ label: dayLabels[d.getDay()], date: dateStr, isToday: i === 0, rev });
+    }
+  }
+
+  const max = Math.max(...days.map(d => d.rev), 1);
+  wrap.innerHTML = days.map(day => {
+    const v = day.rev;
+    const bgFill = day.isToday ? 'rgba(201,168,76,.22)' : 'var(--gold-dim)';
+    const border = day.isToday ? 'var(--gold)' : 'rgba(201,168,76,.45)';
+    return `
+    <div class="bc">
+      <div class="bv" style="${day.isToday ? 'color:var(--gold)' : ''}">${v ? '₾' + fmt(v) : ''}</div>
+      ${v
+        ? `<div class="bar" style="height:${Math.max((v/max)*145,6)}px;width:100%;border-radius:4px 4px 0 0;background:${bgFill};border:1px solid ${border};border-bottom:none;"
+            onmouseover="this.style.background='rgba(201,168,76,.35)'" onmouseout="this.style.background='${bgFill}'"></div>`
+        : `<div class="bar-empty"></div>`}
+      <div class="bl" style="${day.isToday ? 'color:var(--gold);font-weight:600' : ''}">${day.label}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── DONUT ─────────────────────────────────────────────────────────────
+function renderDonut() {
+  const sold = salesInPeriod(dashPeriod).filter(s => s.status === 'გაყიდული');
+  const total = sold.reduce((a, s) => a + s.amount, 0);
+  const wrap = document.getElementById('donutWrap');
+  if (!total) {
+    wrap.innerHTML = `<div class="donut-empty"><svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="24" fill="none" stroke="currentColor" stroke-width="12"/></svg><span>მონაცემი არ არის</span></div>`;
+    return;
+  }
+  const bycat = {};
+  sold.forEach(s => { bycat[s.cat] = (bycat[s.cat] || 0) + s.amount; });
+  const circ = 2 * Math.PI * 38;
+  let offset = 0;
+  const segments = Object.entries(bycat).map(([cat, v]) => {
+    const ci = getCatInfo(cat);
+    const pct = v / total;
+    const len = pct * circ;
+    const seg = {cat, v, pct: Math.round(pct*100), color: ci.color, icon: ci.icon, dasharray: `${len.toFixed(1)} ${(circ-len).toFixed(1)}`, offset: offset.toFixed(1)};
+    offset += len;
+    return seg;
+  });
+  wrap.innerHTML = `<div style="display:flex;align-items:center;gap:18px;">
+    <svg width="90" height="90" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="38" fill="none" stroke="var(--surface2)" stroke-width="18"/>
+      ${segments.map(s => `<circle cx="50" cy="50" r="38" fill="none" stroke="${s.color}" stroke-width="18" stroke-dasharray="${s.dasharray}" stroke-dashoffset="${-s.offset}" transform="rotate(-90 50 50)"/>`).join('')}
+    </svg>
+    <div style="flex:1;display:flex;flex-direction:column;gap:7px;">
+      ${segments.map(s => `<div style="display:flex;align-items:center;gap:7px;font-size:.75rem;">
+        <div style="width:7px;height:7px;border-radius:50%;background:${s.color};flex-shrink:0"></div>
+        <span style="flex:1;color:var(--text-muted)">${s.icon} ${s.cat}</span>
+        <span style="color:var(--text);font-weight:500">${s.pct}%</span>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── FEED ──────────────────────────────────────────────────────────────
+function feedItem(s) {
+  const ci = getCatInfo(s.cat);
+  const ac = s.status === 'გაყიდული' ? 'var(--green)' : s.status === 'მოლოდინი' ? 'var(--gold)' : 'var(--text-dim)';
+  const at = s.status === 'გაყიდული' ? '₾' + s.amount : s.status;
+  return `<div class="fi">
+    <div class="fic" style="background:${ci.color}1a">${ci.icon}</div>
+    <div class="fb">
+      <div class="ft">${s.product}</div>
+      <div class="fm">${s.guest} · ნომ.${s.room} · ${s.dept} · ${s.time}</div>
+    </div>
+    <div class="fa" style="color:${ac}">${at}</div>
+  </div>`;
+}
+
+function renderFeed() {
+  const el = document.getElementById('recentFeed');
+  const periodSales = salesInPeriod(dashPeriod)
+    .slice().sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+  if (!periodSales.length) {
+    el.innerHTML = `<div class="empty-state"><div class="ei">📋</div><div class="et">გაყიდვები არ არის</div><div class="es">დაამატეთ პირველი გაყიდვა</div></div>`;
+    return;
+  }
+  el.innerHTML = periodSales.slice(0, 6).map(feedItem).join('');
+}
+
+// ── TOP STAFF ─────────────────────────────────────────────────────────
+function renderTopStaff() {
+  const el = document.getElementById('topStaff');
+  const byStaff = {};
+  salesInPeriod(dashPeriod).filter(s => s.status === 'გაყიდული').forEach(s => {
+    if (!byStaff[s.staff]) byStaff[s.staff] = {name: s.staff, dept: s.dept, rev: 0, cnt: 0};
+    byStaff[s.staff].rev += s.amount;
+    byStaff[s.staff].cnt++;
+  });
+  const sorted = Object.values(byStaff).sort((a, b) => b.rev - a.rev).slice(0, 5);
+  if (!sorted.length) {
+    el.innerHTML = `<div class="empty-state"><div class="ei">🏆</div><div class="et">მონაცემი არ არის</div></div>`;
+    return;
+  }
+  const init = n => n.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase();
+  el.innerHTML = sorted.map((s, i) => `
+    <div class="sr">
+      <div class="rk ${i < 3 ? 'r' + (i+1) : 'rn'}">${i+1}</div>
+      <div class="sav">${init(s.name)}</div>
+      <div style="flex:1"><div class="sn">${s.name}</div><div class="sd">${s.dept} · ${s.cnt} გაყიდვა</div></div>
+      <div class="ss">₾${fmt(s.rev)}</div>
+    </div>`).join('');
+}
+
+// ── TABLE ─────────────────────────────────────────────────────────────
+function getCommission(sale) {
+  if (sale.commission !== undefined) return sale.commission;
+  const item = catalogItems.find(c => c.name === sale.product);
+  return item ? item.commission : 0;
+}
+
+function renderTable(data) {
+  const d = data || sales;
+  const tb = document.getElementById('salesBody');
+  if (!d.length) {
+    tb.innerHTML = `<tr><td colspan="11"><div class="empty-state"><div class="ei">📋</div><div class="et">ჩანაწერი ვერ მოიძებნა</div></div></td></tr>`;
+    document.getElementById('tableCount').textContent = '0 ჩანაწერი';
+    return;
+  }
+
+  const statuses = ['გაყიდული','მოლოდინი','უარყოფილი'];
+  const sc = s => s === 'გაყიდული' ? {bg:'var(--green-dim)',col:'var(--green)'} :
+                  s === 'მოლოდინი'  ? {bg:'var(--gold-dim)', col:'var(--gold)'}  :
+                                      {bg:'var(--red-dim)',  col:'var(--red)'};
+
+  tb.innerHTML = d.map(s => {
+    const commPct  = getCommission(s);
+    const commAmt  = s.status === 'გაყიდული' ? Math.round(s.amount * commPct / 100) : 0;
+    const catItem  = catalogItems.find(c => c.name === s.product);
+    const priceLabel = catItem ? `<span style="color:var(--text-dim);font-size:.67rem;display:block;margin-top:1px">${catItem.priceLabel || '₾'+catItem.price}</span>` : '';
+    const st       = sc(s.status);
+
+    // inline status options
+    const opts = statuses.map(v =>
+      `<option value="${v}" ${v === s.status ? 'selected' : ''}>${v}</option>`).join('');
+
+    return `<tr>
+      <td style="color:var(--text-dim);font-size:.72rem">#${s.id}</td>
+      <td class="b">${s.guest}<span style="color:var(--text-dim)"> ნომ.${s.room}</span></td>
+      <td style="font-size:.78rem">${getCatInfo(s.cat).icon} ${s.cat}</td>
+      <td>
+        <span style="font-size:.79rem;color:var(--text)">${s.product}</span>
+        ${priceLabel}
+      </td>
+      <td><span class="badge" style="background:${DBG[s.dept]||'var(--blue-dim)'};color:${DCOL[s.dept]||'var(--blue)'}">${s.dept}</span></td>
+      <td style="font-size:.79rem">${s.staff}</td>
+      <td style="color:var(--gold);font-weight:700;white-space:nowrap">${s.status !== 'უარყოფილი' ? '₾' + s.amount : '—'}</td>
+      <td style="color:var(--text-dim);font-size:.78rem;text-align:center">${commPct ? commPct + '%' : '—'}</td>
+      <td style="color:var(--green);font-weight:600;white-space:nowrap">${commAmt ? '₾' + commAmt : '—'}</td>
+      <td>
+        <select class="status-sel" data-id="${s.id}"
+          style="background:${st.bg};color:${st.col}"
+          onchange="updateSaleStatus(${s.id}, this.value, this)">
+          ${opts}
+        </select>
+      </td>
+      <td style="color:var(--text-dim);font-size:.72rem;white-space:nowrap">${s.date || ''}<br><span style="color:var(--text-dim)">${s.time}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tableCount').textContent = d.length + ' ჩანაწერი';
+}
+
+function updateSaleStatus(id, newStatus, selectEl) {
+  const sale = sales.find(s => s.id === id);
+  if (!sale) return;
+  sale.status = newStatus;
+  // update select styling
+  const sc = newStatus === 'გაყიდული' ? {bg:'var(--green-dim)',col:'var(--green)'} :
+             newStatus === 'მოლოდინი'  ? {bg:'var(--gold-dim)', col:'var(--gold)'}  :
+                                         {bg:'var(--red-dim)',  col:'var(--red)'};
+  selectEl.style.background = sc.bg;
+  selectEl.style.color      = sc.col;
+  // refresh commission cell in same row
+  const row   = selectEl.closest('tr');
+  const commPct = getCommission(sale);
+  const commAmt = newStatus === 'გაყიდული' ? Math.round(sale.amount * commPct / 100) : 0;
+  row.cells[7].textContent = commPct ? commPct + '%' : '—';
+  row.cells[8].textContent = commAmt ? '₾' + commAmt : '—';
+  row.cells[8].style.color = commAmt ? 'var(--green)' : '';
+  row.cells[6].textContent = newStatus !== 'უარყოფილი' ? '₾' + sale.amount : '—';
+  // refresh dashboard
+  renderDashboard();
+  showToast('✓ სტატუსი — ' + newStatus, newStatus === 'გაყიდული' ? 'var(--green)' : 'var(--gold)');
+}
+
+// ── CALENDAR PICKER ───────────────────────────────────────────────────
+let calDate    = null;   // selected YYYY-MM-DD or null
+let calViewY   = new Date().getFullYear();
+let calViewM   = new Date().getMonth();   // 0-based
+
+const KA_MONTHS = ['იანვარი','თებერვალი','მარტი','აპრილი','მაისი','ივნისი','ივლისი','აგვისტო','სექტემბერი','ოქტომბერი','ნოემბერი','დეკემბერი'];
+
+function renderCal() {
+  const y = calViewY, m = calViewM;
+  document.getElementById('calMonthLabel').textContent = KA_MONTHS[m] + ' ' + y;
+
+  // dates that have sales data
+  const dateDots = new Set(sales.map(s => s.date).filter(Boolean));
+
+  const today = new Date().toISOString().slice(0,10);
+  const firstDay = new Date(y, m, 1).getDay(); // 0=Sun
+  // convert to Mon-first (0=Mon…6=Sun)
+  const startOffset = (firstDay + 6) % 7;
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+
+  let html = '';
+  // empty cells before 1st
+  for (let i = 0; i < startOffset; i++) html += `<button type="button" class="cal-day empty" disabled></button>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const iso = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const hasDot  = dateDots.has(iso);
+    const isSel   = iso === calDate;
+    const isToday = iso === today;
+    html += `<button type="button" class="cal-day${hasDot?' has-data':''}${isSel?' selected':''}${isToday?' today':''}" onclick="pickCalDay('${iso}')">${d}${hasDot&&!isSel?'<span class="cal-dot"></span>':''}</button>`;
+  }
+  document.getElementById('calGrid').innerHTML = html;
+}
+
+function toggleCal() {
+  const popup = document.getElementById('calPopup');
+  const isOpen = popup.classList.contains('open');
+  if (isOpen) { closeCal(); return; }
+  // reset view to selected date or today
+  const ref = calDate ? new Date(calDate) : new Date();
+  calViewY = ref.getFullYear();
+  calViewM = ref.getMonth();
+  renderCal();
+  popup.classList.add('open');
+  document.getElementById('calBtn').classList.add('active');
+}
+
+function closeCal() {
+  document.getElementById('calPopup').classList.remove('open');
+  document.getElementById('calBtn').classList.remove('active');
+}
+
+function calShift(dir) {
+  calViewM += dir;
+  if (calViewM > 11) { calViewM = 0;  calViewY++; }
+  if (calViewM < 0)  { calViewM = 11; calViewY--; }
+  renderCal();
+}
+
+function pickCalDay(iso) {
+  calDate = iso;
+  const d = new Date(iso);
+  const label = d.getDate() + ' ' + KA_MONTHS[d.getMonth()];
+  document.getElementById('calBtnLabel').textContent = label;
+  document.getElementById('calClear').style.display = 'inline-flex';
+  renderCal();
+  closeCal();
+  filterTable();
+}
+
+function clearCalFilter() {
+  calDate = null;
+  document.getElementById('calBtnLabel').textContent = 'თარიღი';
+  document.getElementById('calClear').style.display = 'none';
+  document.getElementById('calBtn').classList.remove('active');
+  filterTable();
+}
+
+// close cal when clicking outside
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('calWrap');
+  if (wrap && !wrap.contains(e.target)) closeCal();
+});
+
+function filterTable() {
+  const q    = (document.getElementById('searchInput').value || '').toLowerCase();
+  const cat  = document.getElementById('filterCat').value;
+  const dept = document.getElementById('filterDept').value;
+  const st   = document.getElementById('filterStatus').value;
+  renderTable(sales.filter(s => {
+    const mq   = !q || s.guest.toLowerCase().includes(q) || s.room.includes(q) || s.product.toLowerCase().includes(q);
+    const mDate = !calDate || s.date === calDate;
+    return mq && mDate && (!cat || s.cat === cat) && (!dept || s.dept === dept) && (!st || s.status === st);
+  }));
+}
+
+// ── DEPT PAGE ─────────────────────────────────────────────────────────
+function renderDeptPage(dept) {
+  const ds   = sales.filter(s => s.dept === dept);
+  const sold = ds.filter(s => s.status === 'გაყიდული');
+  const rev  = sold.reduce((a, s) => a + s.amount, 0);
+  const cnt  = sold.length;
+  const conv = ds.length ? Math.round(cnt / ds.length * 100) : 0;
+  const avg  = cnt ? Math.round(rev / cnt) : 0;
+  const c    = DCOL[dept] || 'var(--gold)';
+
+  document.getElementById('deptKpis').innerHTML = `
+    <div class="kc" style="--ca:${c}"><div class="kl">შემოსავალი</div><div class="kv" style="color:${c}">₾${fmt(rev)}</div><div class="ks">${cnt} გაყიდვა</div></div>
+    <div class="kc" style="--ca:var(--green)"><div class="kl">გაყიდვები</div><div class="kv" style="color:var(--green)">${cnt}</div><div class="ks">—</div></div>
+    <div class="kc" style="--ca:var(--blue)"><div class="kl">კონვერსია</div><div class="kv" style="color:var(--blue)">${ds.length ? conv + '%' : '—'}</div><div class="ks">—</div></div>
+    <div class="kc" style="--ca:var(--green)"><div class="kl">კონვ. %</div><div class="kv" style="color:var(--green)">${conv ? conv+'%' : '—'}</div><div class="ks">—</div></div>
+    <div class="kc" style="--ca:var(--orange)"><div class="kl">შემოთავაზება სულ</div><div class="kv" style="color:var(--orange)">${ds.length}</div><div class="ks">—</div></div>`;
+
+  // staff
+  const byStaff = {};
+  sold.forEach(s => {
+    if (!byStaff[s.staff]) byStaff[s.staff] = {name: s.staff, dept, rev: 0, cnt: 0};
+    byStaff[s.staff].rev += s.amount;
+    byStaff[s.staff].cnt++;
+  });
+  const sorted = Object.values(byStaff).sort((a, b) => b.rev - a.rev);
+  const init = n => n.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase();
+  document.getElementById('deptStaff').innerHTML = sorted.length
+    ? sorted.map((s, i) => `<div class="sr"><div class="rk ${i<3?'r'+(i+1):'rn'}">${i+1}</div><div class="sav">${init(s.name)}</div><div style="flex:1"><div class="sn">${s.name}</div><div class="sd">${s.cnt} გაყიდვა</div></div><div class="ss">₾${fmt(s.rev)}</div></div>`).join('')
+    : `<div class="empty-state"><div class="ei">👤</div><div class="et">მონაცემი არ არის</div></div>`;
+
+  // products
+  const prods = {};
+  sold.forEach(s => { prods[s.product] = (prods[s.product] || 0) + s.amount; });
+  const psorted = Object.entries(prods).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const mx = psorted[0] ? psorted[0][1] : 1;
+  document.getElementById('deptProgress').innerHTML = psorted.length
+    ? psorted.map(([p, v]) => `<div class="pr-row"><span class="pr-name" style="min-width:120px;font-size:.73rem">${p}</span><div class="pr-track"><div class="pr-fill" style="width:${Math.round(v/mx*100)}%;background:${c}"></div></div><span class="pr-pct">₾${v}</span></div>`).join('')
+    : `<div class="empty-state"><div class="ei">📊</div><div class="et">მონაცემი არ არის</div></div>`;
+
+  // feed
+  document.getElementById('deptFeed').innerHTML = ds.length
+    ? ds.slice(0, 6).map(feedItem).join('')
+    : `<div class="empty-state"><div class="ei">📋</div><div class="et">გაყიდვა არ არის</div></div>`;
+}
+
+// ── STATS PAGE ────────────────────────────────────────────────────────
+// ── STATS PAGE ────────────────────────────────────────────────────────
+let statsPeriod = 'day';
+
+function setStatsPeriod(p, el) {
+  statsPeriod = p;
+  document.querySelectorAll('#page-stats .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderStats();
+}
+
+function statsInPeriod() {
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
+  const labels = {day:'დღეს', week:'ბოლო 7 დღე', month:'ეს თვე', all:'ყველა დრო'};
+  document.getElementById('stats-period-label').textContent = labels[statsPeriod] || '';
+
+  if (statsPeriod === 'all') return sales;
+  if (statsPeriod === 'day')  return sales.filter(s => s.date === todayStr);
+  if (statsPeriod === 'week') {
+    const week = Array.from({length:7}, (_, i) => {
+      const d = new Date(today); d.setDate(today.getDate() - i);
+      return d.toISOString().slice(0, 10);
+    });
+    return sales.filter(s => week.includes(s.date));
+  }
+  if (statsPeriod === 'month') {
+    const ym = todayStr.slice(0, 7);
+    return sales.filter(s => s.date && s.date.startsWith(ym));
+  }
+  return sales;
+}
+
+function renderStats() {
+  const periodSales = statsInPeriod();
+  const sold = periodSales.filter(s => s.status === 'გაყიდული');
+  const rev  = sold.reduce((a, s) => a + s.amount, 0);
+  const cnt  = sold.length;
+
+  document.getElementById('s-rev').textContent     = '₾' + fmt(rev);
+  document.getElementById('s-rev-sub').textContent = cnt ? cnt + ' გაყიდული' : '—';
+  document.getElementById('s-cnt').textContent     = cnt;
+  document.getElementById('s-conv').textContent    = periodSales.length ? Math.round(cnt / periodSales.length * 100) + '%' : '—';
+
+  // category progress
+  const byCat = {};
+  sold.forEach(s => { byCat[s.cat] = (byCat[s.cat] || 0) + s.amount; });
+  const catMax = Math.max(...Object.values(byCat), 1);
+  const sp = document.getElementById('statsProgress');
+  sp.innerHTML = Object.entries(byCat).length
+    ? Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([cat, v]) => {
+        const ci = getCatInfo(cat);
+        return `<div class="pr-row"><span class="pr-name">${ci.icon} ${cat}</span><div class="pr-track"><div class="pr-fill" style="width:${Math.round(v/catMax*100)}%;background:${ci.color}"></div></div><span class="pr-pct">₾${fmt(v)}</span></div>`;
+      }).join('')
+    : `<div class="empty-state"><div class="ei">📊</div><div class="et">გაყიდვა არ არის</div></div>`;
+
+  // top products
+  const byProd = {};
+  sold.forEach(s => { if (!byProd[s.product]) byProd[s.product] = {cnt:0, rev:0}; byProd[s.product].cnt++; byProd[s.product].rev += s.amount; });
+  const tp = document.getElementById('topProducts');
+  const psorted = Object.entries(byProd).sort((a,b)=>b[1].rev-a[1].rev).slice(0,5);
+  tp.innerHTML = psorted.length
+    ? psorted.map(([p, v]) => `<tr><td class="b">${p}</td><td>${v.cnt}</td><td style="color:var(--gold);font-weight:700">₾${fmt(v.rev)}</td></tr>`).join('')
+    : `<tr><td colspan="3"><div class="empty-state" style="padding:20px"><div class="et">მონაცემი არ არის</div></div></td></tr>`;
+
+  // dept compare
+  const byDept = {};
+  ['Front Desk','SPA','Adventures','Wine'].forEach(d => { byDept[d] = {cnt:0, rev:0, tot:0}; });
+  periodSales.forEach(s => {
+    if (!byDept[s.dept]) byDept[s.dept] = {cnt:0, rev:0, tot:0};
+    byDept[s.dept].tot++;
+    if (s.status === 'გაყიდული') { byDept[s.dept].cnt++; byDept[s.dept].rev += s.amount; }
+  });
+  const dc = document.getElementById('deptCompare');
+  const active = Object.entries(byDept).filter(([,v]) => v.tot > 0);
+  dc.innerHTML = active.length
+    ? active.sort((a,b)=>b[1].rev-a[1].rev).map(([d, v]) => {
+        const conv = v.tot ? Math.round(v.cnt/v.tot*100)+'%' : '—';
+        return `<tr><td class="b"><span class="badge" style="background:${DBG[d]||'var(--blue-dim)'};color:${DCOL[d]||'var(--blue)'}">${d}</span></td><td>${v.cnt}</td><td style="color:var(--gold);font-weight:700">₾${fmt(v.rev)}</td><td>${conv}</td></tr>`;
+      }).join('')
+    : `<tr><td colspan="4"><div class="empty-state" style="padding:20px"><div class="et">მონაცემი არ არის</div></div></td></tr>`;
+}
+
+// ── STAFF PAGE ────────────────────────────────────────────────────────
+let staffDeptFilter = '';
+function filterStaff(d) { staffDeptFilter = d; renderStaffPage(); }
+
+function renderStaffPage() {
+  const sold = sales.filter(s => s.status === 'გაყიდული');
+  const byStaff = {};
+  sold.forEach(s => {
+    if (!byStaff[s.staff]) byStaff[s.staff] = {name:s.staff, dept:s.dept, rev:0, cnt:0, tot:0, bonus:0};
+    byStaff[s.staff].rev   += s.amount;
+    byStaff[s.staff].cnt++;
+    byStaff[s.staff].bonus += Math.round(s.amount * (s.commission || 0) / 100);
+  });
+  sales.forEach(s => {
+    if (!byStaff[s.staff]) byStaff[s.staff] = {name:s.staff, dept:s.dept, rev:0, cnt:0, tot:0, bonus:0};
+    byStaff[s.staff].tot++;
+  });
+  let sorted = Object.values(byStaff).sort((a, b) => b.rev - a.rev);
+  if (staffDeptFilter) sorted = sorted.filter(s => s.dept === staffDeptFilter);
+
+  // update KPIs
+  document.getElementById('st-best').textContent  = sorted[0] ? sorted[0].name : '—';
+  document.getElementById('st-total').textContent = Object.keys(byStaff).length;
+  const totalRev   = sold.reduce((a,s) => a + s.amount, 0);
+  const totalBonus = sold.reduce((a,s) => a + Math.round(s.amount * (s.commission||0) / 100), 0);
+  document.getElementById('st-bonus-kpi').textContent = '₾' + fmt(totalBonus);
+
+  const init = n => n.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase();
+  const tb = document.getElementById('staffBody');
+  tb.innerHTML = sorted.length
+    ? sorted.map((s, i) => {
+        const conv = s.tot ? Math.round(s.cnt/s.tot*100) : 0;
+        return `<tr>
+          <td><span class="rk ${i<3?'r'+(i+1):'rn'}">${i+1}</span></td>
+          <td class="b">${s.name}</td>
+          <td><span class="badge" style="background:${DBG[s.dept]||'var(--blue-dim)'};color:${DCOL[s.dept]||'var(--blue)'}">${s.dept}</span></td>
+          <td>${s.cnt}</td>
+          <td style="color:var(--gold);font-weight:700">₾${fmt(s.rev)}</td>
+          <td style="color:var(--green);font-weight:700">₾${fmt(s.bonus)}</td>
+          <td>${conv ? conv+'%' : '—'}</td>
+        </tr>`;
+      }).join('')
+    : `<tr><td colspan="8"><div class="empty-state"><div class="ei">👤</div><div class="et">გაყიდვა არ არის</div></div></td></tr>`;
+}
+
+// ── CATALOG ───────────────────────────────────────────────────────────
+const DEPT_CAT_MAP = {
+  'SPA':        {cat:'SPA პაკეტი', icon:'💆', color:'var(--purple)'},
+  'Front Desk': {cat:'Room Upgrade', icon:'🏨', color:'var(--gold)'},
+  'Adventures': {cat:'სათავგ. აქტ.', icon:'🧗', color:'var(--orange)'},
+  'Wine':       {cat:'ღვინის ტური', icon:'🍷', color:'var(--blue)'},
+};
+
+let catalogItems = [
+  {id:'c1', cat:'Room Upgrade', icon:'🏨', name:'Suite Upgrade',       price:200, commission:10, priceLabel:'₾200–₾350', desc:'Standard → Deluxe ან Suite-ად განახლება.', color:'var(--gold)',   dept:'Front Desk'},
+  {id:'c2', cat:'Room Upgrade', icon:'🌅', name:'Lake View Room',       price:80,  commission:10, priceLabel:'+₾80/ღ',   desc:'ტბის ხედიანი ოთახი — ნებისმიერი ტიპის ნომერი',    color:'var(--gold)',   dept:'Front Desk'},
+  {id:'c3', cat:'Room Upgrade', icon:'⛰️', name:'Mountain View +',      price:60,  commission:10, priceLabel:'+₾60/ღ',   desc:'მთის ხედი — ნებისმიერი ტიპის ნომერი',          color:'var(--gold)',   dept:'Front Desk'},
+  {id:'c4', cat:'SPA პაკეტი',  icon:'💆', name:'SPA Premium',          price:180, commission:15, priceLabel:'₾180',      desc:'2 საათი — სრული სხეული + ჰიდროთერაპია',               color:'var(--purple)', dept:'SPA'},
+  {id:'c5', cat:'SPA პაკეტი',  icon:'💑', name:'Couples Retreat',      price:280, commission:15, priceLabel:'₾280',      desc:'ერთდროული მასაჟი + ვარდის აბაზანა + შამპანური',         color:'var(--purple)', dept:'SPA'},
+  {id:'c6', cat:'SPA პაკეტი',  icon:'🌿', name:'Detox Package',        price:220, commission:15, priceLabel:'₾220',      desc:'დეტოქსი — სმ. + სხეულის მასაჟი + საუნა',             color:'var(--purple)', dept:'SPA'},
+  {id:'c7', cat:'სათავგ. აქტ.',icon:'🏍️', name:'ATV Tour',             price:150, commission:12, priceLabel:'₾150/2h',   desc:'ლოპოტას ტყე · 16+ · ინსტრუქტორით',                   color:'var(--orange)', dept:'Adventures'},
+  {id:'c8', cat:'სათავგ. აქტ.',icon:'🚣', name:'Kayaking',             price:90,  commission:12, priceLabel:'₾90',       desc:'ლოპოტას ტბა · 1.5 საათი · 8+',                    color:'var(--orange)', dept:'Adventures'},
+  {id:'c9', cat:'სათავგ. აქტ.',icon:'🐴', name:'Horse Riding',         price:110, commission:12, priceLabel:'₾110',      desc:'3 საათი · გადადგმულ-კოლოფით + ინსტრუქტორი',                      color:'var(--orange)', dept:'Adventures'},
+  {id:'c10',cat:'სათავგ. აქტ.',icon:'🏹', name:'Archery Session',      price:50,  commission:12, priceLabel:'₾50',       desc:'1 საათი · ინსტრუქტორი + სამიზნე-ბანაკი',                      color:'var(--orange)', dept:'Adventures'},
+  {id:'c11',cat:'ღვინის ტური', icon:'🍷', name:'Lopota Wine Tour',     price:120, commission:8,  priceLabel:'₾120',      desc:'ვაზის ეზო + დეგუსტაცია + სუვენირი',                     color:'var(--blue)',   dept:'Wine'},
+  {id:'c12',cat:'ღვინის ტური', icon:'🥂', name:'Private Wine Tasting', price:240, commission:8,  priceLabel:'₾240',      desc:'სომელიე + 8 ღვინო + ყველი',                   color:'var(--blue)',   dept:'Wine'},
+];
+
+let catIdCounter = 20;
+let activeCatFilter = '';
+let editingCatalogId = null;
+let selectedCatalogDept = '';
+
+function buildCatFilters() {
+  // build filters dynamically from actual catalogItems cats
+  const seen = new Set();
+  const cats = catalogItems.filter(c => { if(seen.has(c.cat)) return false; seen.add(c.cat); return true; });
+  const allBtn = `<div class="df active" onclick="filterCatalog('',this)">ყველა</div>`;
+  const catBtns = cats.map(c =>
+    `<div class="df" onclick="filterCatalog('${c.cat}',this)">${c.icon} ${c.cat}</div>`).join('');
+  document.getElementById('catFilters').innerHTML = allBtn + catBtns;
+}
+
+function renderCatalog(filter) {
+  activeCatFilter = filter;
+  const f = filter ? catalogItems.filter(c => c.cat === filter) : catalogItems;
+  const grid = document.getElementById('catalogGrid');
+  if (!f.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1"><div class="empty-state"><div class="ei">🏷️</div><div class="et">კატალოგი ცარიელია</div><div class="es">დაამატეთ პირველი სერვისი</div></div></div>`;
+    return;
+  }
+  grid.innerHTML = f.map(c => {
+    const comm = c.commission ? `<span style="font-size:.67rem;color:var(--green);background:var(--green-dim);padding:1px 7px;border-radius:20px;font-weight:600">${c.commission}% საკ.</span>` : '';
+    const label = c.priceLabel || ('₾' + c.price);
+    return `
+    <div class="panel cat-item" data-id="${c.id}" style="transition:box-shadow .15s,border-color .15s;border-top:2px solid ${c.color};cursor:default"
+      onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.3)'" onmouseout="this.style.boxShadow='none'">
+      <div class="pb">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <div style="font-size:1.7rem">${c.icon}</div>
+          <div style="display:flex;gap:5px">
+            <button class="icon-btn" title="რედაქტ." onclick="openEditCatalog('${c.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="icon-btn icon-btn-del" title="წაშლა" onclick="confirmDeleteCatalog('${c.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+          <div style="font-size:.87rem;font-weight:600;flex:1;margin-right:8px">${c.name}</div>
+          <div style="font-size:.85rem;font-weight:700;color:var(--gold);white-space:nowrap">${label}</div>
+        </div>
+        <div style="font-size:.69rem;color:var(--text-muted);line-height:1.5;margin-bottom:10px;min-height:28px">${c.desc || '—'}</div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span class="badge" style="background:${c.color}18;color:${c.color};font-size:.61rem">${c.cat}</span>
+          ${comm}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterCatalog(f, el) {
+  document.querySelectorAll('.df').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+  renderCatalog(f);
+}
+
+// ── CATALOG MODAL ────────────────────────────────────────────────────
+function selectCatalogDept(dept, el) {
+  selectedCatalogDept = dept;
+  document.querySelectorAll('#cDeptGrid .csi').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function openCatalogModal() {
+  editingCatalogId = null;
+  selectedCatalogDept = '';
+  document.getElementById('catModalTitle').textContent = '✦ კატალოგის დამატება';
+  document.getElementById('cDeleteBtn').style.display = 'none';
+  ['cName','cPrice','cCommission','cPriceLabel','cDesc'].forEach(id => document.getElementById(id).value = '');
+  resetEmojiField();
+  document.querySelectorAll('#cDeptGrid .csi').forEach(c => c.classList.remove('active'));
+  document.getElementById('catModalBg').classList.add('open');
+}
+
+function openEditCatalog(id) {
+  const item = catalogItems.find(c => c.id === id);
+  if (!item) return;
+  editingCatalogId = id;
+  selectedCatalogDept = item.dept;
+  document.getElementById('catModalTitle').textContent = '✎ კატალოგის განახლება';
+  document.getElementById('cDeleteBtn').style.display = 'flex';
+  setEmojiField(item.icon || '');
+  document.getElementById('cName').value        = item.name || '';
+  document.getElementById('cPrice').value       = item.price || '';
+  document.getElementById('cCommission').value  = item.commission || '';
+  document.getElementById('cPriceLabel').value  = item.priceLabel || '';
+  document.getElementById('cDesc').value        = item.desc || '';
+  document.querySelectorAll('#cDeptGrid .csi').forEach(c => {
+    c.classList.toggle('active', c.getAttribute('onclick').includes(`'${item.dept}'`));
+  });
+  document.getElementById('catModalBg').classList.add('open');
+}
+
+function confirmDeleteCatalog(id) {
+  const item = catalogItems.find(c => c.id === id);
+  if (!item) return;
+  if (confirm(`წაიშალოს "${item.name}"?`)) {
+    catalogItems = catalogItems.filter(c => c.id !== id);
+    buildCatFilters();
+    renderCatalog(activeCatFilter);
+    showToast('🗑️ წაიშალა — ' + item.name, 'var(--red)');
+  }
+}
+
+function deleteCatalogItem() {
+  if (!editingCatalogId) return;
+  const item = catalogItems.find(c => c.id === editingCatalogId);
+  if (!item) return;
+  if (confirm(`წაიშალოს "${item.name}"?`)) {
+    catalogItems = catalogItems.filter(c => c.id !== editingCatalogId);
+    closeCatalogModal();
+    buildCatFilters();
+    renderCatalog(activeCatFilter);
+    showToast('🗑️ წაიშალა — ' + item.name, 'var(--red)');
+  }
+}
+
+function saveCatalogItem() {
+  const icon       = document.getElementById('cIcon').value.trim() || '📦';
+  const name       = document.getElementById('cName').value.trim();
+  const price      = parseFloat(document.getElementById('cPrice').value) || 0;
+  const commission = parseFloat(document.getElementById('cCommission').value) || 0;
+  const priceLabel = document.getElementById('cPriceLabel').value.trim() || ('₾' + price);
+  const desc       = document.getElementById('cDesc').value.trim();
+
+  if (!name)                 { showToast('⚠️ სახელი შეავსეთ', 'var(--orange)'); return; }
+  if (!selectedCatalogDept)  { showToast('⚠️ განყოფ. აირჩიეთ', 'var(--orange)'); return; }
+
+  const dmap = DEPT_CAT_MAP[selectedCatalogDept] || {cat:'სხვა', icon:'📦', color:'var(--text-muted)'};
+
+  if (editingCatalogId) {
+    // UPDATE
+    const idx = catalogItems.findIndex(c => c.id === editingCatalogId);
+    if (idx > -1) {
+      catalogItems[idx] = {...catalogItems[idx], icon, name, price, commission, priceLabel, desc,
+        dept: selectedCatalogDept, cat: dmap.cat, color: dmap.color};
+    }
+    showToast('✓ განახლდა — ' + name, 'var(--green)');
+  } else {
+    // CREATE
+    const newItem = {
+      id: 'c' + (++catIdCounter), icon, name, price, commission, priceLabel, desc,
+      dept: selectedCatalogDept, cat: dmap.cat, color: dmap.color
+    };
+    catalogItems.push(newItem);
+    showToast('✓ დაემატა — ' + name, 'var(--green)');
+  }
+
+  closeCatalogModal();
+  buildCatFilters();
+  renderCatalog(activeCatFilter);
+}
+
+function closeCatalogModal() { document.getElementById('catModalBg').classList.remove('open'); }
+function closeCatBg(e)        { if (e.target === e.currentTarget) closeCatalogModal(); }
+
+// ── MODAL ─────────────────────────────────────────────────────────────
+let selCat = '';
+
+function setAmount(val) {
+  document.getElementById('mAmount').value = val || '';
+  document.getElementById('mAmountDisplay').innerHTML =
+    val ? `<span style="font-size:.7rem;opacity:.5;margin-right:2px">🔒</span>₾${val}` : '<span style="color:var(--text-dim);font-weight:400;font-size:.8rem">— აირჩიეთ პროდუქტი —</span>';
+}
+
+function setDept(val) {
+  document.getElementById('mDept').value = val || '';
+  const display = document.getElementById('mDeptDisplay');
+  if (val) {
+    display.textContent = val;
+    display.style.color = 'var(--text)';
+    display.style.fontWeight = '500';
+  } else {
+    display.textContent = '— აირჩიეთ პროდუქტი —';
+    display.style.color = 'var(--text-muted)';
+    display.style.fontWeight = '400';
+  }
+}
+
+function buildCatGrid() {
+  // derive unique categories from current catalogItems
+  const seen = new Set();
+  const cats = catalogItems.filter(c => { if (seen.has(c.cat)) return false; seen.add(c.cat); return true; });
+  const catIconMap = {'Room Upgrade':'🏨','SPA პაკეტი':'💆','სათავგ. აქტ.':'🧗','ღვინის ტური':'🍷'};
+  document.getElementById('catGrid').innerHTML = cats.map(c =>
+    `<div class="csi ${selCat===c.cat?'active':''}" onclick="selectCat('${c.cat}',this)">
+      <span>${catIconMap[c.cat]||c.icon||'📦'}</span>${c.cat}
+    </div>`).join('');
+}
+
+function selectCat(cat, el) {
+  selCat = cat;
+  document.querySelectorAll('#catGrid .csi').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+
+  // build product list from catalogItems for this category
+  const items = catalogItems.filter(c => c.cat === cat);
+  document.getElementById('mProduct').innerHTML = items.length
+    ? items.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+    : '<option value="">— პროდუქტი არ არის —</option>';
+
+  // auto-fill amount from first item
+  const first = items[0];
+  setAmount(first ? first.price : '');
+
+  // auto-set dept from catalog item
+  if (first && first.dept) setDept(first.dept);
+
+  // on product change → update amount
+  document.getElementById('mProduct').onchange = function () {
+    const chosen = catalogItems.find(c => c.id === this.value);
+    setAmount(chosen ? chosen.price : '');
+    if (chosen && chosen.dept) setDept(chosen.dept);
+  };
+}
+
+function openModal() {
+  selCat = '';
+  buildCatGrid();
+  document.getElementById('mProduct').innerHTML = '<option>— აირჩიეთ კატეგორია —</option>';
+  document.getElementById('mProduct').onchange = null;
+  ['mRoom','mGuest','mNote','mStaff'].forEach(id => document.getElementById(id).value = '');
+  setAmount('');
+  setDept('');
+  document.getElementById('mStatus').value = 'მოლოდინი';
+  document.getElementById('modalBg').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
+function closeBg(e)   { if (e.target === e.currentTarget) closeModal(); }
+
+function saveSale() {
+  const room  = document.getElementById('mRoom').value.trim();
+  const guest = document.getElementById('mGuest').value.trim();
+  const staff = document.getElementById('mStaff').value.trim();
+  if (!room)  { showToast('⚠️ ნომრის № შეავსეთ', 'var(--orange)'); return; }
+  if (!guest) { showToast('⚠️ სტუმრის სახელი შეავსეთ', 'var(--orange)'); return; }
+  if (!selCat){ showToast('⚠️ კატეგორია აირჩიეთ', 'var(--orange)'); return; }
+  if (!staff) { showToast('⚠️ თანამშრომლის სახელი შეავსეთ', 'var(--orange)'); return; }
+
+  const prodEl   = document.getElementById('mProduct');
+  const prodId   = prodEl.value;
+  const product  = prodEl.options[prodEl.selectedIndex]?.text || '—';
+  const amount   = parseFloat(String(document.getElementById('mAmount').value).replace(/[^\d.]/g,'')) || 0;
+  const status   = document.getElementById('mStatus').value;
+  const dept     = document.getElementById('mDept').value;
+  const catItem  = catalogItems.find(c => c.id === prodId);
+  const commission = catItem ? catItem.commission : 0;
+  const now      = new Date();
+  const time     = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  const date     = now.toISOString().slice(0, 10); // YYYY-MM-DD
+
+  sales.unshift({id: nextId++, room, guest, cat: selCat, product, dept, staff, amount, commission, status, time, date});
+
+  updateBadges();
+  renderDashboard();
+
+  if (document.getElementById('page-log').classList.contains('active'))   renderTable();
+  if (document.getElementById('page-stats').classList.contains('active')) renderStats();
+  if (document.getElementById('page-staff').classList.contains('active')) renderStaffPage();
+  if (document.getElementById('page-dept').classList.contains('active'))  {
+    const d = document.getElementById('deptName2').textContent;
+    renderDeptPage(d);
+  }
+
+  closeModal();
+  showToast('✓  ₾' + amount + ' — ' + product, 'var(--green)');
+}
+
+// ── EXPORT ────────────────────────────────────────────────────────────
+function exportCSV() {
+  if (!sales.length) { showToast('⚠️ გაყიდვა არ არის', 'var(--orange)'); return; }
+  const h = ['ID','სტუმარი','ნომერი','კატეგორია','პროდუქტი','განყოფილება','თანამშრომელი','თანხა (₾)','საკომისიო %','საკომისიო ₾','სტატუსი','თარიღი','დრო'].join(',');
+  const r = sales.map(s => {
+    const commPct = getCommission(s);
+    const commAmt = s.status === 'გაყიდული' ? Math.round(s.amount * commPct / 100) : 0;
+    return [s.id,`"${s.guest}"`,s.room,`"${s.cat}"`,`"${s.product}"`,s.dept,`"${s.staff}"`,s.amount,commPct+'%',commAmt,s.status,s.date||'',s.time].join(',');
+  });
+  const b = new Blob(['\uFEFF' + h + '\n' + r.join('\n')], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b);
+  a.download = 'lopota_upsell_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  showToast('📥 CSV გადმოტვირთვა...', 'var(--blue)');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────
+function showToast(msg, bg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = bg || 'var(--green)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── CLOCK ─────────────────────────────────────────────────────────────
+function updateClock() {
+  const d = new Date();
+  const days = ['კვ','ორ','სამ','ოთხ','ხ','პ','შ'];
+  const m    = ['იანვარი','თებერვალი','მარტი','აპრილი','მაისი','ივნისი','ივლისი','აგვისტო','სექტემბერი','ოქტომბერი','ნოემბერი','დეკემბერი'];
+  const t    = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+  document.getElementById('liveTime').textContent = `${days[d.getDay()]}, ${d.getDate()} ${m[d.getMonth()]} · ${t}`;
+  document.getElementById('sfDate').textContent   = `${d.getDate()} ${m[d.getMonth()]} · ${t}`;
+}
+setInterval(updateClock, 1000);
+
+// ── THEME ─────────────────────────────────────────────────────────────
+function setTheme(t, el) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.querySelectorAll('.tdot').forEach(d => d.classList.remove('active'));
+  if (el) el.classList.add('active');
+  // persist
+  try { localStorage.setItem('lopota-theme', t); } catch(e) {}
+}
+// restore saved theme
+(function() {
+  try {
+    const saved = localStorage.getItem('lopota-theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+      // dot will be activated after DOM loads
+      document.addEventListener('DOMContentLoaded', () => {
+        const dot = document.querySelector(`.tdot[data-t="${saved}"]`);
+        if (dot) { document.querySelectorAll('.tdot').forEach(d=>d.classList.remove('active')); dot.classList.add('active'); }
+      });
+    }
+  } catch(e) {}
+})();
+
+// ── INIT ──────────────────────────────────────────────────────────────
+renderDashboard();
+buildCatFilters();
+renderCatalog('');
+updateClock();
+updateBadges();
+initEmojiPicker();
+// check session on load
+(function(){
+  try {
+    if (sessionStorage.getItem('lopota-auth') === '1') {
+      const s = document.getElementById('loginScreen');
+      if (s) s.style.display = 'none';
+    } else {
+      setTimeout(() => { const i = document.getElementById('loginInput'); if(i) i.focus(); }, 100);
+    }
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
